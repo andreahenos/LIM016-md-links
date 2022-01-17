@@ -1,4 +1,39 @@
 {
-  "name": "md-links",
-  "version": "0.1.0"
+  "name": "lim016-md-links",
+  "version": "0.1.0",
+  "description": "Tool that reads and analyzes files in Markdown format to verify the links they contain and report some statistics.",
+  "devDependencies": {
+    "eslint": "^8.7.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4"
+  },
+  "scripts": {
+    "start": "node ./index.js",
+    "pretest": "npm run eslint",
+    "test": "jest --coverage",
+    "lint": "eslint"
+  },
+  "main": "index.js",
+  "keywords": [
+    "javascript",
+    "markdown",
+    "links",
+    "md-links",
+    "jest",
+    "api"
+  ],
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreahenos/LIM016-md-links.git"
+  },
+  "author": "Andrea Henostroza <henostroza.andrea@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andreahenos/LIM016-md-links/issues",
+    "email": "henostroza.andrea@gmail.com"
+  },
+  "homepage": "https://github.com/andreahenos/LIM016-md-links#readme"
 }

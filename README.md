@@ -216,7 +216,7 @@ Reflexiona y luego marca los objetivos que has llegado a entender y aplicar en t
 
 - [ ] **GitHub: Colaboración en Github (branches | forks | pull requests | code review | tags)**
 
-- [ ] **GitHub: Organización en Github (projects | issues | labels | milestones | releases)**
+- [  ] **GitHub: Organización en Github (projects | issues | labels | milestones | releases)**
 
 ### HTTP
 
