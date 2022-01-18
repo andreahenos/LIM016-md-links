@@ -8,11 +8,12 @@
     "eslint-plugin-import": "^2.25.4"
   },
   "scripts": {
-    "start": "node ./index.js",
+    "start": "node ./src/md-links.js",
     "pretest": "npm run eslint",
     "test": "jest --coverage",
     "lint": "eslint"
   },
+  "type": "module",
   "main": "index.js",
   "keywords": [
     "javascript",
