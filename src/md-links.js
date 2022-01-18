@@ -12,4 +12,4 @@ function mdLinks(route) {
   readFiles(route);
 }
 
-mdLinks('./src/md-links.js');
+mdLinks('./Modelo');
