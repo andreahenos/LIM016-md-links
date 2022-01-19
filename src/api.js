@@ -27,17 +27,10 @@ export const verifyPathExistence = (route) => {
   });
 }; */
 
-// comprobar tipo de ruta
-export const verifyPathType = (route) => {
-  if (path.isAbsolute(route)) return console.log('2. Path type: Absolute path.');
-  return console.log('2. Path type: Relative path.');
-};
-
-// convertir ruta relativa a absoluta
-export const covertPathTypeToAbsolute = (route) => {
-  // console.log('process.cwd(): ', process.cwd());
-  console.log('3. Absolute path: ', path.resolve(route));
-};
+// ver tipo de path y convertir
+export const verifyPathType = (route) => (!path.isAbsolute(route)
+  ? console.log('2. File: ', path.resolve(route))
+  : console.log('2. File: ', route));
 
 // comprobar tipo de archivo
 export const verifyFileType = (route) => {

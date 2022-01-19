@@ -1,17 +1,18 @@
 import {
   verifyPathExistence,
   verifyPathType,
-  covertPathTypeToAbsolute,
+  /* covertPathTypeToAbsolute,
   verifyFileType,
   readDirectory,
   getExtension,
-  readFiles,
+  readFiles, */
 } from './api.js';
 
 function mdLinks(path) {
   try {
     if (verifyPathExistence(path)) {
       console.log('1. Path exist.');
+      verifyPathType(path);
     } else {
       console.log('1. Path does not exist.');
     }
@@ -25,13 +26,14 @@ function mdLinks(path) {
     })
     .catch((err) => console.log(err)); */
 
-  verifyPathType(path);
+  /*
   covertPathTypeToAbsolute(path);
   verifyFileType(path);
   readDirectory(path);
   getExtension(path);
   readFiles(path);
+  */
 }
 
-mdLinks('./Modelo');
-// mdLinks('C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Modelo');
+// mdLinks('./Modelo');
+mdLinks('C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Modelo');
