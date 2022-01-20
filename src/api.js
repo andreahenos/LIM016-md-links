@@ -59,11 +59,11 @@ export const getMdFiles = (route) => {
         .then((files) => {
           const searchMdFiles = files.filter((file) => getExtension(file) === '.md');
           if (files === [] || searchMdFiles === []) return ('There are no files with md format.');
-          const convertAbsolute = searchMdFiles.map((file) => getAbsolutePath(file));
-          return console.log(convertAbsolute);
+          // return console.log(searchMdFiles, absolutePath);
+          const convertToAbsolute = searchMdFiles.map((file) => path.join(absolutePath, file));
+          return console.log(convertToAbsolute);
         })
         .catch((err) => console.log('An error has occurred: ', err));
-      return 'Obtained md file paths';
     })
     .catch((err) => console.log('An error has occurred: ', err));
 };

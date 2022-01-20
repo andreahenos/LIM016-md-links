@@ -13,5 +13,5 @@ function mdLinks(path) {
 }
 
 mdLinks('./Modelo');
-// mdLinks('./Modelo/prueba2.md');
-// mdLinks('C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Modelo');
+mdLinks('./Modelo/prueba2.md');
+mdLinks('C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Modelo');
