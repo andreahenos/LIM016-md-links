@@ -1,18 +1,21 @@
 import fs from 'fs';
 import path from 'path';
+import { marked } from 'marked';
+import createDOMPurify from 'dompurify';
+import { JSDOM } from 'jsdom';
 
-// comprobar validez
+// verify path existence
 export const verifyPathExistence = (route) => fs.existsSync(route);
 
-// ver tipo de path y convertir
+// get absolute path
 const getAbsolutePath = (route) => (!path.isAbsolute(route)
   ? path.resolve(route)
   : route);
 
-// comprobar tipo de archivo
+// verify tipe of file
 const verifyFileType = (route) => fs.statSync(route).isFile();
 
-// leer directorio
+// read directory
 const readDirectory = (route) => {
   const arrOfFiles = fs.readdirSync(route);
   return arrOfFiles.map((file) => getAbsolutePath(path.join(route, file)));
@@ -32,22 +35,39 @@ const arrMdFilesOfDirectory = (arrOfFiles) => {
   }
 };
 
-// leer archivos
-export const readFiles = (arr) => arr.forEach((file) => fs.readFileSync(file, 'utf8'));
+// read files
+const readFiles = (arr) => arr.map((file) => fs.readFileSync(file, 'utf8'));
 
-// get array of md format file
-export const arrOfMdFiles = (route) => {
-  const promise = new Promise((resolve) => {
-    const absolutePath = getAbsolutePath(route);
-    try {
-      if (verifyFileType(absolutePath) === false) {
-        resolve(arrMdFilesOfDirectory(absolutePath));
-      } else {
-        resolve(arrMdFiles(absolutePath));
-      }
-    } catch (err) {
-      console.log('An error has occurred: ', err);
+// get content of md format file
+export const contentOfMdFiles = (route) => {
+  const absolutePath = getAbsolutePath(route);
+  try {
+    if (verifyFileType(absolutePath) === false) {
+      const arrOfFiles = arrMdFilesOfDirectory(absolutePath);
+      return readFiles(arrOfFiles);
     }
+    const arrOfFiles = arrMdFiles(absolutePath);
+    return readFiles(arrOfFiles);
+  } catch (err) {
+    return console.log('An error has occurred: ', err);
+  }
+};
+
+// convert content of file in HTMl format
+const convertToHtml = (route) => {
+  const content = contentOfMdFiles(route);
+  const contentInHtml = content.map((oneContent) => marked.parse(oneContent));
+  return contentInHtml;
+};
+
+// sanitize the output HTML
+export const satanizeHtml = (route) => {
+  const promise = new Promise((resolve) => {
+    const html = convertToHtml(route);
+    const dom = new JSDOM(html);
+    const DOMPurify = createDOMPurify(dom.window);
+    const cleanHtml = html.map((oneFile) => DOMPurify.sanitize(oneFile));
+    resolve(cleanHtml);
   });
   return promise;
 };

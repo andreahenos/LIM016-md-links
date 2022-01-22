@@ -36,5 +36,10 @@
     "url": "https://github.com/andreahenos/LIM016-md-links/issues",
     "email": "henostroza.andrea@gmail.com"
   },
-  "homepage": "https://github.com/andreahenos/LIM016-md-links#readme"
+  "homepage": "https://github.com/andreahenos/LIM016-md-links#readme",
+  "dependencies": {
+    "dompurify": "^2.3.4",
+    "jsdom": "^19.0.0",
+    "marked": "^4.0.10"
+  }
 }

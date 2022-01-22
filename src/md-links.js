@@ -1,13 +1,13 @@
 import {
   verifyPathExistence,
-  arrOfMdFiles,
+  satanizeHtml,
 } from './api.js';
 
 function mdLinks(path) {
   try {
     if (verifyPathExistence(path)) {
-      return arrOfMdFiles(path)
-        .then((arrOfFiles) => console.log(arrOfFiles));
+      return satanizeHtml(path)
+        .then((res) => console.log(res));
     }
     return console.log('1. Path doesnt exist.');
   } catch (err) {
@@ -16,5 +16,5 @@ function mdLinks(path) {
 }
 
 mdLinks('./Modelo/Modelo2');
-mdLinks('./Modelo/md.md');
+// mdLinks('./Modelo/md2.md');
 // mdLinks('C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Modelo');
