@@ -61,13 +61,48 @@ const convertToHtml = (route) => {
 };
 
 // sanitize the output HTML
-export const satanizeHtml = (route) => {
+const satanizeHtml = (route) => {
+  const html = convertToHtml(route);
+  const dom = new JSDOM(html);
+  const DOMPurify = createDOMPurify(dom.window);
+  const cleanHtml = html.map((oneFile) => DOMPurify.sanitize(oneFile));
+  return cleanHtml;
+};
+
+// get anchor elements
+/* export const filterLinks = (route) => {
   const promise = new Promise((resolve) => {
-    const html = convertToHtml(route);
-    const dom = new JSDOM(html);
-    const DOMPurify = createDOMPurify(dom.window);
-    const cleanHtml = html.map((oneFile) => DOMPurify.sanitize(oneFile));
-    resolve(cleanHtml);
+    const html = satanizeHtml(route);
+    console.log(html);
+    const a = html.map((oneHtml) => {
+      const dom = new JSDOM(oneHtml);
+      const arrayOfTagsA = [];
+      const tagsA = dom.window.document.querySelectorAll('a');
+      arrayOfTagsA.push(tagsA);
+      if (arrayOfTagsA === []) return ('No links to analize.');
+      return arrayOfTagsA;
+    });
+    resolve(a);
   });
   return promise;
+}; */
+
+const filterLinks = (html) => {
+  // const promise = new Promise((resolve) => {
+    console.log(html);
+    const dom = new JSDOM(html);
+    const tagsA = dom.window.document.querySelectorAll('a');
+    const arrayOfTagsA = Array.from(tagsA);
+    if (arrayOfTagsA === []) console.log('No links to analize.');
+    if (arrayOfTagsA.length === 1) console.log(arrayOfTagsA[0].href);
+    return arrayOfTagsA.map((elem) => elem.href);
+    // resolve(arrayOfTagsA.map((elem) => elem.href));
+  // });
+  // return promise;
+};
+
+export const b = (route) => {
+  const allFileHtml = satanizeHtml(route);
+  if (allFileHtml.length === 1) return filterLinks(allFileHtml);
+  return allFileHtml.map((doc) => filterLinks(doc));
 };
