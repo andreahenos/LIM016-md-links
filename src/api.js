@@ -22,7 +22,7 @@ const readDirectory = (route) => {
 };
 
 // filter md files
-const arrMdFiles = (route) => {
+const arrMdFile = (route) => {
   if (path.extname(route) === '.md') return route.split(' ');
   return console.log('It is not an md format file');
 };
@@ -46,7 +46,7 @@ export const contentOfMdFiles = (route) => {
       const arrOfFiles = arrMdFilesOfDirectory(absolutePath);
       return readFiles(arrOfFiles);
     }
-    const arrOfFiles = arrMdFiles(absolutePath);
+    const arrOfFiles = arrMdFile(absolutePath);
     return readFiles(arrOfFiles);
   } catch (err) {
     return console.log('An error has occurred: ', err);
@@ -69,40 +69,29 @@ const satanizeHtml = (route) => {
   return cleanHtml;
 };
 
-// get anchor elements
-/* export const filterLinks = (route) => {
-  const promise = new Promise((resolve) => {
-    const html = satanizeHtml(route);
-    console.log(html);
-    const a = html.map((oneHtml) => {
-      const dom = new JSDOM(oneHtml);
-      const arrayOfTagsA = [];
-      const tagsA = dom.window.document.querySelectorAll('a');
-      arrayOfTagsA.push(tagsA);
-      if (arrayOfTagsA === []) return ('No links to analize.');
-      return arrayOfTagsA;
-    });
-    resolve(a);
-  });
-  return promise;
-}; */
-
-const filterLinks = (html) => {
-  // const promise = new Promise((resolve) => {
-    console.log(html);
-    const dom = new JSDOM(html);
-    const tagsA = dom.window.document.querySelectorAll('a');
-    const arrayOfTagsA = Array.from(tagsA);
-    if (arrayOfTagsA === []) console.log('No links to analize.');
-    if (arrayOfTagsA.length === 1) console.log(arrayOfTagsA[0].href);
-    return arrayOfTagsA.map((elem) => elem.href);
-    // resolve(arrayOfTagsA.map((elem) => elem.href));
-  // });
-  // return promise;
+// get links
+const filterTagsA = (html) => {
+  const dom = new JSDOM(html);
+  const tagsA = dom.window.document.querySelectorAll('a');
+  return Array.from(tagsA);
 };
 
-export const b = (route) => {
-  const allFileHtml = satanizeHtml(route);
-  if (allFileHtml.length === 1) return filterLinks(allFileHtml);
-  return allFileHtml.map((doc) => filterLinks(doc));
+// get links properties
+export const getPropiedades = (route) => {
+  const promise = new Promise((resolve) => {
+    const allFilesHtml = satanizeHtml(route);
+    if (filterTagsA(allFilesHtml).length < 1) resolve('No hay links que analizar');
+    const arrOfPropiedades = allFilesHtml.map((doc) => {
+      const hrefProp = filterTagsA(doc).map((elem) => elem.href);
+      const textProp = filterTagsA(doc).map((elem) => elem.text);
+      const propiedades = {
+        href: hrefProp,
+        text: textProp,
+        file: route,
+      };
+      return propiedades;
+    });
+    resolve(arrOfPropiedades);
+  });
+  return promise;
 };

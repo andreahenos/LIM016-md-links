@@ -1,20 +1,21 @@
 import {
   verifyPathExistence,
-  b,
+  getPropiedades,
 } from './api.js';
 
 function mdLinks(path) {
   try {
     if (verifyPathExistence(path)) {
-      return console.log(b(path));
-        // .then((res) => console.log(res));
+      return getPropiedades(path)
+        .then((res) => console.log(res));
     }
-    return console.log('1. Path doesnt exist.');
+    return console.log('Path doesnt exist.');
   } catch (err) {
     return console.log('An error has occurred: ', err);
   }
 }
 
+// mdLinks('./Modelo/md.md');
 mdLinks('./Modelo');
-// mdLinks('./Modelo/md2.md');
+// mdLinks('./Modelo/Modelo3');
 // mdLinks('C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Modelo');
