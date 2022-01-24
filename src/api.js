@@ -21,6 +21,9 @@ const readDirectory = (route) => {
   return arrOfFiles.map((file) => getAbsolutePath(path.join(route, file)));
 };
 
+// read files
+const readFiles = (arr) => arr.map((file) => fs.readFileSync(file, 'utf8'));
+
 // filter md files
 const arrMdFile = (route) => {
   if (path.extname(route) === '.md') return route.split(' ');
@@ -34,9 +37,6 @@ const arrMdFilesOfDirectory = (arrOfFiles) => {
     return console.log('An error has occurred: ', err);
   }
 };
-
-// read files
-const readFiles = (arr) => arr.map((file) => fs.readFileSync(file, 'utf8'));
 
 // get content of md format file
 export const contentOfMdFiles = (route) => {
@@ -61,7 +61,7 @@ const convertToHtml = (route) => {
 };
 
 // sanitize the output HTML
-const satanizeHtml = (route) => {
+const sanitizeHtml = (route) => {
   const html = convertToHtml(route);
   const dom = new JSDOM(html);
   const DOMPurify = createDOMPurify(dom.window);
@@ -76,22 +76,23 @@ const filterTagsA = (html) => {
   return Array.from(tagsA);
 };
 
-// get links properties
-export const getPropiedades = (route) => {
+// get properties
+const getProperties = (html, route) => {
+  const arrayOfTagsA = filterTagsA(html);
+  const objWithProperties = [];
+  arrayOfTagsA.map((tag) => (
+    objWithProperties.push({
+      href: tag.href,
+      text: (tag.textContent).slice(0, 50),
+      file: route,
+    })));
+  return objWithProperties;
+};
+
+export const getPropertiesByFile = (route) => {
   const promise = new Promise((resolve) => {
-    const allFilesHtml = satanizeHtml(route);
-    if (filterTagsA(allFilesHtml).length < 1) resolve('No hay links que analizar');
-    const arrOfPropiedades = allFilesHtml.map((doc) => {
-      const hrefProp = filterTagsA(doc).map((elem) => elem.href);
-      const textProp = filterTagsA(doc).map((elem) => elem.text);
-      const propiedades = {
-        href: hrefProp,
-        text: textProp,
-        file: route,
-      };
-      return propiedades;
-    });
-    resolve(arrOfPropiedades);
+    const arrOfhtml = sanitizeHtml(route);
+    resolve(arrOfhtml.map((doc) => getProperties(doc, route)));
   });
   return promise;
 };

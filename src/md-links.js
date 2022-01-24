@@ -1,12 +1,12 @@
 import {
   verifyPathExistence,
-  getPropiedades,
+  getPropertiesByFile,
 } from './api.js';
 
 function mdLinks(path) {
   try {
     if (verifyPathExistence(path)) {
-      return getPropiedades(path)
+      return getPropertiesByFile(path)
         .then((res) => console.log(res));
     }
     return console.log('Path doesnt exist.');
@@ -15,7 +15,7 @@ function mdLinks(path) {
   }
 }
 
-// mdLinks('./Modelo/md.md');
+// mdLinks('./Modelo/md2.md');
+// mdLinks('./Modelo');
 mdLinks('./Modelo');
-// mdLinks('./Modelo/Modelo3');
 // mdLinks('C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Modelo');
