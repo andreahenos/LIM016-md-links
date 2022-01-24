@@ -3,6 +3,7 @@ import path from 'path';
 import { marked } from 'marked';
 import createDOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
+import fetch from 'node-fetch';
 
 // verify path existence
 export const verifyPathExistence = (route) => fs.existsSync(route);
@@ -85,7 +86,16 @@ const getProperties = (html, route) => {
       href: tag.href,
       text: (tag.textContent).slice(0, 50),
       file: route,
-    })));
+      status: fetch(tag.href)
+        .then((res) => res.status)
+        .then((status) => status)
+        .catch((err) => `An error has occurred: ${err}`),
+      message: fetch(tag.href)
+        .then((res) => ((res.status >= 200) && (res.status <= 399) ? 'OK' : 'FAIL'))
+        .then((message) => message)
+        .catch(() => 'FAIL'),
+    })
+  ));
   return objWithProperties;
 };
 
