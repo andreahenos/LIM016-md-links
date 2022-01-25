@@ -17,4 +17,6 @@ function mdLinks(path) {
 mdLinks('./Modelo/md.md');
 // mdLinks('./Modelo/md2.md');
 // mdLinks('./Modelo/md3.md');
+// mdLinks('./Modelo/Modelo2');
+// mdLinks('./Modelo/Modelo3');
 // mdLinks('C:/Users/51960/Desktop/Md-Links/LIM016-md-links/Modelo');
