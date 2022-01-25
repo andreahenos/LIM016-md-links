@@ -35,7 +35,7 @@ const arrMdFilesOfDirectory = (arrOfFiles) => {
   try {
     return readDirectory(arrOfFiles).filter((file) => path.extname(file) === '.md');
   } catch (err) {
-    return console.log('An error has occurred: ', err);
+    return console.log(`An error has occurred: ${err}`);
   }
 };
 
@@ -50,23 +50,19 @@ export const contentOfMdFiles = (route) => {
     const arrOfFiles = arrMdFile(absolutePath);
     return readFiles(arrOfFiles);
   } catch (err) {
-    return console.log('An error has occurred: ', err);
+    return console.log(`An error has occurred: ${err}`);
   }
 };
 
 // convert content of file in HTMl format
 const convertToHtml = (route) => {
-  const content = contentOfMdFiles(route);
-  const contentInHtml = content.map((oneContent) => marked.parse(oneContent));
-  return contentInHtml;
-};
-
-// sanitize the output HTML
-const sanitizeHtml = (route) => {
-  const html = convertToHtml(route);
-  const dom = new JSDOM(html);
-  const DOMPurify = createDOMPurify(dom.window);
-  const cleanHtml = html.map((oneFile) => DOMPurify.sanitize(oneFile));
+  const arrContent = contentOfMdFiles(route);
+  const arrContentInHtml = arrContent.map((oneContent) => marked.parse(oneContent));
+  const cleanHtml = arrContentInHtml.map((oneFile) => {
+    const dom = new JSDOM(oneFile);
+    const DOMPurify = createDOMPurify(dom.window);
+    return DOMPurify.sanitize(oneFile);
+  });
   return cleanHtml;
 };
 
@@ -77,8 +73,15 @@ const filterTagsA = (html) => {
   return Array.from(tagsA);
 };
 
+export const getStatus = (tag) => {
+  const status = fetch(tag.href)
+    .then((res) => res.status)
+    .catch((err) => `An error has occurred: ${err}`);
+  return status;
+};
+
 // get properties
-const getProperties = (html, route) => {
+/* const getProperties = (html, route) => {
   const arrayOfTagsA = filterTagsA(html);
   const objWithProperties = [];
   arrayOfTagsA.map((tag) => (
@@ -86,23 +89,52 @@ const getProperties = (html, route) => {
       href: tag.href,
       text: (tag.textContent).slice(0, 50),
       file: route,
-      status: fetch(tag.href)
-        .then((res) => res.status)
-        .then((status) => status)
-        .catch((err) => `An error has occurred: ${err}`),
-      message: fetch(tag.href)
-        .then((res) => ((res.status >= 200) && (res.status <= 399) ? 'OK' : 'FAIL'))
-        .then((message) => message)
-        .catch(() => 'FAIL'),
     })
   ));
   return objWithProperties;
+}; */
+
+const getProperties = (html, route) => {
+  const arrayOfTagsA = filterTagsA(html);
+  const properties = arrayOfTagsA.map((tag) => ({
+    href: tag.href,
+    text: (tag.textContent).slice(0, 50),
+    file: route,
+    status: fetch(tag.href)
+      .then((res) => res.status)
+      .catch((err) => `An error has occurred: ${err}`),
+    message: fetch(tag.href)
+      .then((res) => ((res.status >= 200) && (res.status <= 399) ? 'OK' : 'FAIL'))
+      .catch(() => 'FAIL'),
+  }));
+  return properties;
 };
 
+/* const getProperties = (html, route) => {
+  const arrayOfTagsA = filterTagsA(html);
+  const prop = arrayOfTagsA.map((tag) => (
+    new Promise((resolve) => {
+      resolve(fetch(tag.href)
+        .then((res) => ({
+          href: tag.href,
+          text: (tag.textContent).slice(0, 50),
+          file: route,
+          status: res.status,
+          message: (res.status >= 200) && (res.status <= 399) ? 'OK' : 'FAIL',
+        }))
+        .catch((err) => ({
+          href: tag.href,
+          text: (tag.textContent).slice(0, 50),
+          file: route,
+          status: `An error has occurred: ${err}`,
+          message: 'FAIL',
+        })));
+    })));
+  return Promise.all(prop)
+    .then((res) => res);
+}; */
+
 export const getPropertiesByFile = (route) => {
-  const promise = new Promise((resolve) => {
-    const arrOfhtml = sanitizeHtml(route);
-    resolve(arrOfhtml.map((doc) => getProperties(doc, route)));
-  });
-  return promise;
+  const arrOfhtml = convertToHtml(route);
+  return arrOfhtml.map((oneHtml) => getProperties(oneHtml, route));
 };
