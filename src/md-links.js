@@ -1,12 +1,12 @@
 import {
   verifyPathExistence,
-  getPropertiesByFile,
+  getProperties,
 } from './api.js';
 
 function mdLinks(path) {
   try {
     if (verifyPathExistence(path)) {
-      return console.log(getPropertiesByFile(path));
+      return console.log(getProperties(path));
     }
     return console.log('Path doesnt exist.');
   } catch (err) {

@@ -3,7 +3,7 @@ import path from 'path';
 import { marked } from 'marked';
 import createDOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
-import fetch from 'node-fetch';
+import axios from 'axios';
 
 // verify path existence
 export const verifyPathExistence = (route) => fs.existsSync(route);
@@ -66,75 +66,50 @@ const convertToHtml = (route) => {
   return cleanHtml;
 };
 
-// get links
+// get tags 'a'
 const filterTagsA = (html) => {
   const dom = new JSDOM(html);
   const tagsA = dom.window.document.querySelectorAll('a');
   return Array.from(tagsA);
 };
 
-export const getStatus = (tag) => {
-  const status = fetch(tag.href)
-    .then((res) => res.status)
-    .catch((err) => `An error has occurred: ${err}`);
-  return status;
-};
-
 // get properties
-/* const getProperties = (html, route) => {
-  const arrayOfTagsA = filterTagsA(html);
-  const objWithProperties = [];
-  arrayOfTagsA.map((tag) => (
-    objWithProperties.push({
-      href: tag.href,
-      text: (tag.textContent).slice(0, 50),
-      file: route,
-    })
-  ));
-  return objWithProperties;
-}; */
-
-const getProperties = (html, route) => {
-  const arrayOfTagsA = filterTagsA(html);
-  const properties = arrayOfTagsA.map((tag) => ({
+const propertiesObj = (tag, route) => {
+  const properties = {
     href: tag.href,
     text: (tag.textContent).slice(0, 50),
     file: route,
-    status: fetch(tag.href)
-      .then((res) => res.status)
-      .catch((err) => `An error has occurred: ${err}`),
-    message: fetch(tag.href)
-      .then((res) => ((res.status >= 200) && (res.status <= 399) ? 'OK' : 'FAIL'))
-      .catch(() => 'FAIL'),
-  }));
+  };
   return properties;
 };
 
-/* const getProperties = (html, route) => {
-  const arrayOfTagsA = filterTagsA(html);
-  const prop = arrayOfTagsA.map((tag) => (
-    new Promise((resolve) => {
-      resolve(fetch(tag.href)
-        .then((res) => ({
-          href: tag.href,
-          text: (tag.textContent).slice(0, 50),
-          file: route,
-          status: res.status,
-          message: (res.status >= 200) && (res.status <= 399) ? 'OK' : 'FAIL',
-        }))
-        .catch((err) => ({
-          href: tag.href,
-          text: (tag.textContent).slice(0, 50),
-          file: route,
-          status: `An error has occurred: ${err}`,
-          message: 'FAIL',
-        })));
+const httpRequest = (arrOfTags) => {
+  const getRequire = arrOfTags.map((tag) => axios.get(tag.href)
+    .then((res) => ({
+      status: res.status,
     })));
-  return Promise.all(prop)
-    .then((res) => res);
-}; */
 
-export const getPropertiesByFile = (route) => {
-  const arrOfhtml = convertToHtml(route);
-  return arrOfhtml.map((oneHtml) => getProperties(oneHtml, route));
+  Promise.allSettled(getRequire)
+    .then((res) => res.map((promiseResult) => {
+      if (promiseResult.status === 'fulfilled') {
+        return {
+          status: promiseResult.value.status,
+          ok: 'ok',
+        };
+      }
+      return {
+        status: promiseResult.reason.response.status,
+        ok: 'fail',
+      };
+    }));
+};
+
+export const getProperties = (route) => {
+  const arrOfHtml = convertToHtml(route);
+  arrOfHtml.map((html) => {
+    const arrOfTagsA = filterTagsA(html);
+    if (arrOfTagsA.length === 0) return console.log('No hay links que analizar');
+    console.log(arrOfTagsA.map((tag) => propertiesObj(tag, route)));
+    return httpRequest(arrOfTagsA);
+  });
 };

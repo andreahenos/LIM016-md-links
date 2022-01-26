@@ -39,9 +39,9 @@
   },
   "homepage": "https://github.com/andreahenos/LIM016-md-links#readme",
   "dependencies": {
+    "axios": "^0.25.0",
     "dompurify": "^2.3.4",
     "jsdom": "^19.0.0",
-    "marked": "^4.0.10",
-    "node-fetch": "^3.2.0"
+    "marked": "^4.0.10"
   }
 }
