@@ -1,5 +1,5 @@
 {
-  "name": "lim016-md-links",
+  "name": "md-links-analyzer",
   "version": "0.1.0",
   "description": "Tool that reads and analyzes files in Markdown format to verify the links they contain and report some statistics.",
   "devDependencies": {
