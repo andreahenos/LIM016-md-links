@@ -55,7 +55,7 @@ export const contentOfMdFiles = (route) => {
 };
 
 // convert content of file in HTMl format
-const convertToHtml = (route) => {
+export const convertToHtml = (route) => {
   const arrContent = contentOfMdFiles(route);
   const arrContentInHtml = arrContent.map((oneContent) => marked.parse(oneContent));
   const cleanHtml = arrContentInHtml.map((oneFile) => {
@@ -67,11 +67,20 @@ const convertToHtml = (route) => {
 };
 
 // get tags 'a'
-const filterTagsA = (html) => {
+export const filterTagsA = (html) => {
   const dom = new JSDOM(html);
   const tagsA = dom.window.document.querySelectorAll('a');
   return Array.from(tagsA);
 };
+
+/* export const filterTagsAA = (route) => {
+  const arrOfHtml = convertToHtml(route);
+  arrOfHtml.map((html) => {
+    const dom = new JSDOM(html);
+    const tagsA = dom.window.document.querySelectorAll('a');
+    return console.log('AQUI', Array.from(tagsA));
+  });
+}; */
 
 // get properties
 const propertiesObj = (tag, route) => {
@@ -83,33 +92,37 @@ const propertiesObj = (tag, route) => {
   return properties;
 };
 
-const httpRequest = (arrOfTags) => {
+export const httpRequest = (arrOfTags) => {
   const getRequire = arrOfTags.map((tag) => axios.get(tag.href)
     .then((res) => ({
       status: res.status,
     })));
 
-  Promise.allSettled(getRequire)
-    .then((res) => res.map((promiseResult) => {
-      if (promiseResult.status === 'fulfilled') {
-        return {
-          status: promiseResult.value.status,
-          ok: 'ok',
-        };
-      }
-      return {
-        status: promiseResult.reason.response.status,
-        ok: 'fail',
-      };
-    }));
+  return Promise.allSettled(getRequire);
 };
+
+const httpRequestRes = (arrOfTagsA) => httpRequest(arrOfTagsA)
+  .then((res) => res.map((promiseResult) => {
+    if (promiseResult.status === 'fulfilled') {
+      return {
+        status: promiseResult.value.status,
+        ok: 'ok',
+      };
+    }
+    return {
+      status: promiseResult.reason.response.status,
+      ok: 'fail',
+    };
+  }));
 
 export const getProperties = (route) => {
   const arrOfHtml = convertToHtml(route);
-  arrOfHtml.map((html) => {
+  return arrOfHtml.map((html) => {
     const arrOfTagsA = filterTagsA(html);
     if (arrOfTagsA.length === 0) return console.log('No hay links que analizar');
     console.log(arrOfTagsA.map((tag) => propertiesObj(tag, route)));
-    return httpRequest(arrOfTagsA);
+    return httpRequestRes(arrOfTagsA);
   });
 };
+
+// filterTagsAA('./Modelo/md2.md');

@@ -6,7 +6,7 @@ import {
 function mdLinks(path) {
   try {
     if (verifyPathExistence(path)) {
-      return console.log(getProperties(path));
+      return Promise.all(getProperties(path));
     }
     return console.log('Path doesnt exist.');
   } catch (err) {
@@ -14,7 +14,8 @@ function mdLinks(path) {
   }
 }
 
-mdLinks('./Modelo/md.md');
+mdLinks('./Modelo/md.md')
+  .then((res) => console.log(res));
 // mdLinks('./Modelo/md2.md');
 // mdLinks('./Modelo/md3.md');
 // mdLinks('./Modelo/Modelo2');
