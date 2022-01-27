@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs, { readdirSync } from 'fs';
 import path from 'path';
 import { marked } from 'marked';
 import createDOMPurify from 'dompurify';
@@ -67,62 +67,42 @@ export const convertToHtml = (route) => {
 };
 
 // get tags 'a'
-export const filterTagsA = (html) => {
-  const dom = new JSDOM(html);
-  const tagsA = dom.window.document.querySelectorAll('a');
-  return Array.from(tagsA);
-};
-
-/* export const filterTagsAA = (route) => {
+const filterTagsA = (route) => {
   const arrOfHtml = convertToHtml(route);
-  arrOfHtml.map((html) => {
+  return arrOfHtml.map((html) => {
     const dom = new JSDOM(html);
     const tagsA = dom.window.document.querySelectorAll('a');
-    return console.log('AQUI', Array.from(tagsA));
+    return Array.from(tagsA);
   });
-}; */
-
-// get properties
-const propertiesObj = (tag, route) => {
-  const properties = {
-    href: tag.href,
-    text: (tag.textContent).slice(0, 50),
-    file: route,
-  };
-  return properties;
 };
 
 export const httpRequest = (arrOfTags) => {
-  const getRequire = arrOfTags.map((tag) => axios.get(tag.href)
+  const getRequire = arrOfTags[0].map((tag) => axios.get(tag.href)
     .then((res) => ({
+      href: tag.href,
+      text: tag.textContent.slice(0, 50),
       status: res.status,
+      message: 'ok',
+    }))
+    .catch((res) => ({
+      href: tag.href,
+      text: tag.textContent.slice(0, 50),
+      status: res.response.status,
+      message: 'fail',
     })));
-
   return Promise.allSettled(getRequire);
 };
 
-const httpRequestRes = (arrOfTagsA) => httpRequest(arrOfTagsA)
-  .then((res) => res.map((promiseResult) => {
-    if (promiseResult.status === 'fulfilled') {
-      return {
-        status: promiseResult.value.status,
-        ok: 'ok',
-      };
-    }
-    return {
-      status: promiseResult.reason.response.status,
-      ok: 'fail',
-    };
-  }));
+const httpRequestRes = (arrOfTagsA, route) => httpRequest(arrOfTagsA)
+  .then((res) => res.map((promiseResult) => ({
+    href: promiseResult.value.href,
+    text: promiseResult.value.text,
+    file: route,
+    status: promiseResult.value.status,
+    ok: promiseResult.value.message,
+  })));
 
 export const getProperties = (route) => {
-  const arrOfHtml = convertToHtml(route);
-  return arrOfHtml.map((html) => {
-    const arrOfTagsA = filterTagsA(html);
-    if (arrOfTagsA.length === 0) return console.log('No hay links que analizar');
-    console.log(arrOfTagsA.map((tag) => propertiesObj(tag, route)));
-    return httpRequestRes(arrOfTagsA);
-  });
+  const arrOfTagsA = filterTagsA(route);
+  return httpRequestRes(arrOfTagsA, route);
 };
-
-// filterTagsAA('./Modelo/md2.md');
