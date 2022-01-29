@@ -8,28 +8,30 @@ import {
 } from './api.js';
 
 function mdLinks(path) {
-  try {
-    if (verifyPathExistence(path)) {
-      if (verifyFileType(path) === true) {
-        if (filterTagsA(path).length < 1) return console.log('The file is not in Markdown format.');
-        if (filterTagsA(path)[0].length < 1) return console.log('There are no links in the file.');
-        return (getProperties(path)
-          .then((res) => console.log(res))
-        );
-      }
-      if (readDirectory(path).length < 1) return console.log('The folder has no file.');
-      if (arrMdFilesOfDirectory(path).length < 1) return console.log('The folder has no Markdown format files.');
-      return (getProperties(path)
-        .then((res) => {
-          if (res.length < 1) return console.log('There are no links in the file of the folder.');
-          return console.log(res);
-        })
-      );
+  const promise = new Promise((resolve, reject) => {
+    try {
+      if (verifyPathExistence(path)) {
+        if (verifyFileType(path) === true) {
+          if (filterTagsA(path).length < 1) resolve('The file is not in Markdown format.');
+          if (filterTagsA(path)[0].length < 1) resolve('There are no links in the file.');
+          (getProperties(path)
+            .then((res) => resolve(res))
+          );
+        }
+        if (verifyFileType(path) === false) {
+          if (readDirectory(path).length < 1) resolve('The folder has no file.');
+          if (arrMdFilesOfDirectory(path).length < 1) resolve('The folder has no Markdown format files.');
+          if (filterTagsA(path).reduce((a, b) => a.concat(b)).length < 1) resolve('There are no links in the file of the folder.');
+          (getProperties(path)
+            .then((res) => resolve(res))
+          );
+        }
+      } else resolve('Path doesnt exist.');
+    } catch (err) {
+      reject(`An error has occurred: ${err}`);
     }
-    return console.log('Path doesnt exist.');
-  } catch (err) {
-    return console.log('An error has occurred: ', err);
-  }
+  });
+  return promise;
 }
 
-mdLinks('./Modelo/Modelo5');
+mdLinks('./Modelo/Modelo2').then((res) => console.log(res)).catch((err) => console.log(err));
