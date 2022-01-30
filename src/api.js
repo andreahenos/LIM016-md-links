@@ -12,7 +12,7 @@ export const verifyPathExistence = (route) => fs.existsSync(route);
 const getAbsolutePath = (route) => (!path.isAbsolute(route)
   ? path.resolve(route)
   : route);
- 
+
 // verify tipe of file
 export const verifyFileType = (route) => fs.statSync(route).isFile();
 
@@ -23,10 +23,10 @@ export const readDirectory = (route) => {
 };
 
 // read files
-const readFiles = (arr) => arr.map((file) => fs.readFileSync(file, 'utf8')); 
+const readFiles = (arr) => arr.map((file) => fs.readFileSync(file, 'utf8'));
 
 // filter md files
-export const arrMdFile = (route) => {
+const arrMdFile = (route) => {
   if (path.extname(route) === '.md') return route.split(' ');
   return [];
 };
@@ -36,7 +36,7 @@ export const arrMdFilesOfDirectory = (arrOfFiles) => {
     const arrOfMdFiles = readDirectory(arrOfFiles).filter((file) => path.extname(file) === '.md');
     return arrOfMdFiles;
   } catch (err) {
-    return console.log(`An error has occurred: ${err}`);
+    return console.log(err.message);
   }
 };
 
@@ -45,54 +45,53 @@ const contentOfMdFiles = (route) => {
   const absolutePath = getAbsolutePath(route);
   try {
     if (verifyFileType(absolutePath) === false) {
-      const arrOfFiles = arrMdFilesOfDirectory(absolutePath);
-      return readFiles(arrOfFiles);
+      const arrOfMdFiles = arrMdFilesOfDirectory(absolutePath);
+      return readFiles(arrOfMdFiles);
     }
-    const arrOfFiles = arrMdFile(absolutePath);
-    return readFiles(arrOfFiles);
+    const arrOfMdFiles = arrMdFile(absolutePath);
+    return readFiles(arrOfMdFiles);
   } catch (err) {
-    return console.log(`An error has occurred: ${err}`);
+    return console.log(err.message);
   }
 };
 
 // convert content of file in HTMl format
 const convertToHtml = (route) => {
-  const arrContent = contentOfMdFiles(route);
-  const arrContentInHtml = arrContent.map((oneContent) => marked.parse(oneContent));
-  const cleanHtml = arrContentInHtml.map((oneFile) => {
+  const arrOfContent = contentOfMdFiles(route);
+  const arrOfContentInHtml = arrOfContent.map((oneContent) => marked.parse(oneContent));
+  const arrOfSanitizedHtmls = arrOfContentInHtml.map((oneFile) => {
     const dom = new JSDOM(oneFile);
     const DOMPurify = createDOMPurify(dom.window);
     return DOMPurify.sanitize(oneFile);
   });
-  return cleanHtml;
+  return arrOfSanitizedHtmls;
 };
 
 // get tags 'a'
 export const filterTagsA = (route) => {
-  const arrOfHtml = convertToHtml(route);
-  return arrOfHtml.map((html) => {
+  const arrOfHtmls = convertToHtml(route);
+  const arrOfTagsA = arrOfHtmls.map((html) => {
     const dom = new JSDOM(html);
     const tagsA = dom.window.document.querySelectorAll('a');
     return Array.from(tagsA);
   });
+  return arrOfTagsA;
 };
 
-const httpRequest = (arrOfTags) => {
-  const getRequire = arrOfTags.map((tag) => axios.get(tag.href)
-    .then((res) => ({
-      href: tag.href,
-      text: tag.textContent.slice(0, 50),
-      status: res.status,
-      message: 'ok',
-    }))
-    .catch((res) => ({
-      href: tag.href,
-      text: tag.textContent.slice(0, 50),
-      status: res.response.status,
-      message: 'fail',
-    })));
-  return Promise.allSettled(getRequire);
-};
+// http request
+const httpRequest = (arrOfTagsA) => Promise.allSettled(arrOfTagsA.map((tag) => axios.get(tag.href)
+  .then((res) => ({
+    href: tag.href,
+    text: tag.textContent.slice(0, 50),
+    status: res.status,
+    message: 'ok',
+  }))
+  .catch((res) => ({
+    href: tag.href,
+    text: tag.textContent.slice(0, 50),
+    status: res.response.status,
+    message: 'fail',
+  }))));
 
 const httpRequestRes = (arrOfTagsA, route) => httpRequest(arrOfTagsA)
   .then((res) => res.map((promiseResult) => ({
@@ -103,6 +102,7 @@ const httpRequestRes = (arrOfTagsA, route) => httpRequest(arrOfTagsA)
     ok: promiseResult.value.message,
   })));
 
+// get properties
 export const getProperties = (route) => {
   const arrOfTagsA = filterTagsA(route);
   if (arrOfTagsA.length === 1) {

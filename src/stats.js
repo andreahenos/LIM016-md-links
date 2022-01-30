@@ -1,8 +1,8 @@
 // get total number of links
-const totalLinks = (arrOfProperties) => arrOfProperties.map((ofOneFile) => ofOneFile.href).length;
+export const totalLinks = (arrOfProperties) => arrOfProperties.length;
 
 // get unique links
-const uniqueLinks = (arrOfProperties) => {
+export const uniqueLinks = (arrOfProperties) => {
   const arrOfLinks = arrOfProperties.map((ofOneFile) => ofOneFile.href);
   const setLinks = new Set(arrOfLinks);
   const result = [...setLinks];
@@ -10,7 +10,7 @@ const uniqueLinks = (arrOfProperties) => {
 };
 
 // get broken links
-const brokenLinks = (arrOfProperties) => {
+export const brokenLinks = (arrOfProperties) => {
   const arrOfBrokenLinks = arrOfProperties.filter((ofOneFile) => ofOneFile.ok === 'fail' && (ofOneFile.status < 200 || ofOneFile.status > 400));
   return arrOfBrokenLinks.length;
 };
