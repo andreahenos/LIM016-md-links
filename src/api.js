@@ -31,24 +31,28 @@ const arrMdFile = (route) => {
   return [];
 };
 
-export const arrMdFilesOfDirectory = (arrOfFiles) => {
+export const arrMdFilesOfDirectory = (route) => {
   try {
-    const arrOfMdFiles = readDirectory(arrOfFiles).filter((file) => path.extname(file) === '.md');
+    const arrOfMdFiles = readDirectory(route).filter((file) => path.extname(file) === '.md');
     return arrOfMdFiles;
   } catch (err) {
     return console.log(err.message);
   }
 };
 
+export const joinPaths = (route) => arrMdFilesOfDirectory(route).map((one) => path.join(route, one.split('\\').pop()));
+
+// console.log(joinPaths('./Modelo/Modelo2'));
+
 // get content of md format file
 const contentOfMdFiles = (route) => {
-  const absolutePath = getAbsolutePath(route);
+  const absoluteRoute = getAbsolutePath(route);
   try {
-    if (verifyFileType(absolutePath) === false) {
-      const arrOfMdFiles = arrMdFilesOfDirectory(absolutePath);
+    if (verifyFileType(absoluteRoute) === false) {
+      const arrOfMdFiles = arrMdFilesOfDirectory(absoluteRoute);
       return readFiles(arrOfMdFiles);
     }
-    const arrOfMdFiles = arrMdFile(absolutePath);
+    const arrOfMdFiles = arrMdFile(absoluteRoute);
     return readFiles(arrOfMdFiles);
   } catch (err) {
     return console.log(err.message);
@@ -77,6 +81,8 @@ export const filterTagsA = (route) => {
   });
   return arrOfTagsA;
 };
+
+// console.log(filterTagsA('./Modelo/Modelo2'));
 
 // http request
 const httpRequest = (arrOfTagsA) => Promise.allSettled(arrOfTagsA.map((tag) => axios.get(tag.href)
@@ -108,6 +114,8 @@ export const getProperties = (route) => {
   if (arrOfTagsA.length === 1) {
     return httpRequestRes(arrOfTagsA[0], route);
   }
-  const newArrOfTags = arrOfTagsA.reduce((a, b) => a.concat(b));
-  return httpRequestRes(newArrOfTags, route);
+  console.log(arrOfTagsA[2]);
+  console.log(joinPaths(route)[2]);
+  const newArrOfTagsA = arrOfTagsA.reduce((a, b) => a.concat(b));
+  return httpRequestRes(newArrOfTagsA, route);
 };
