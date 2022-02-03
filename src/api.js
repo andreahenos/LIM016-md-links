@@ -14,75 +14,60 @@ const getAbsolutePath = (route) => (!path.isAbsolute(route)
   : route);
 
 // verify tipe of file
-export const verifyFileType = (route) => fs.statSync(route).isFile();
+const verifyFileType = (route) => fs.statSync(route).isFile();
 
-// read directory
-export const readDirectory = (route) => {
-  const arrOfFiles = fs.readdirSync(route);
-  return arrOfFiles.map((file) => getAbsolutePath(path.join(route, file)));
-};
-
-// read files
-const readFiles = (arr) => arr.map((file) => fs.readFileSync(file, 'utf8'));
-
-// filter md files
-const arrMdFile = (route) => {
-  if (path.extname(route) === '.md') return route.split(' ');
-  return [];
-};
-
-export const arrMdFilesOfDirectory = (route) => {
-  try {
-    const arrOfMdFiles = readDirectory(route).filter((file) => path.extname(file) === '.md');
-    return arrOfMdFiles;
-  } catch (err) {
-    return console.log(err.message);
+// get md files
+const arrWithMdFileRoutes = (route) => {
+  if (verifyFileType(route)) {
+    const absRoute = getAbsolutePath(route);
+    if (path.extname(absRoute) === '.md') return absRoute.split(' ');
+    return [];
   }
+  const directoryContent = fs.readdirSync(route);
+  const allRoutes = directoryContent.map((file) => {
+    const absPath = getAbsolutePath(path.join(route, file));
+    if (verifyFileType(absPath)) return absPath;
+    return arrWithMdFileRoutes(absPath);
+  }).flat();
+  return allRoutes.filter((oneRoute) => path.extname(oneRoute) === '.md');
 };
 
-export const joinPaths = (route) => arrMdFilesOfDirectory(route).map((one) => path.join(route, one.split('\\').pop()));
-
-// console.log(joinPaths('./Modelo/Modelo2'));
-
-// get content of md format file
-const contentOfMdFiles = (route) => {
-  const absoluteRoute = getAbsolutePath(route);
-  try {
-    if (verifyFileType(absoluteRoute) === false) {
-      const arrOfMdFiles = arrMdFilesOfDirectory(absoluteRoute);
-      return readFiles(arrOfMdFiles);
-    }
-    const arrOfMdFiles = arrMdFile(absoluteRoute);
-    return readFiles(arrOfMdFiles);
-  } catch (err) {
-    return console.log(err.message);
-  }
+// get content of files
+const objsArrWithRouteAndContent = (arrOfFiles) => {
+  const obj = arrOfFiles.map((fileRoute) => ({
+    route: fileRoute,
+    content: fs.readFileSync(fileRoute, 'utf8'),
+  }));
+  return obj;
 };
 
-// convert content of file in HTMl format
-const convertToHtml = (route) => {
-  const arrOfContent = contentOfMdFiles(route);
-  const arrOfContentInHtml = arrOfContent.map((oneContent) => marked.parse(oneContent));
-  const arrOfSanitizedHtmls = arrOfContentInHtml.map((oneFile) => {
-    const dom = new JSDOM(oneFile);
-    const DOMPurify = createDOMPurify(dom.window);
-    return DOMPurify.sanitize(oneFile);
+// convert content to HTML
+const convertToHtml = (content) => {
+  const fileInHTML = marked.parse(content);
+  const dom = new JSDOM(fileInHTML);
+  const DOMPurify = createDOMPurify(dom.window);
+  return DOMPurify.sanitize(fileInHTML);
+};
+
+// filter anchor tags
+export const filterTagsA = (htmlContent) => {
+  const dom = new JSDOM(htmlContent);
+  const tagsA = dom.window.document.querySelectorAll('a');
+  return Array.from(tagsA);
+};
+
+// convert to html and filter anchor tags
+const objArrWithRouteAndTagsA = (route) => {
+  const arrWithFiles = arrWithMdFileRoutes(route);
+  const changeContentToTagsA = objsArrWithRouteAndContent(arrWithFiles).map((objOneFile) => {
+    const objOfOneFile = objOneFile;
+    const contentInHTML = convertToHtml(objOneFile.content);
+    const arrOfTagsA = filterTagsA(contentInHTML);
+    objOfOneFile.content = arrOfTagsA;
+    return objOneFile;
   });
-  return arrOfSanitizedHtmls;
+  return changeContentToTagsA;
 };
-
-// get tags 'a'
-export const filterTagsA = (route) => {
-  const arrOfHtmls = convertToHtml(route);
-  const arrOfTagsA = arrOfHtmls.map((html) => {
-    const dom = new JSDOM(html);
-    const tagsA = dom.window.document.querySelectorAll('a');
-    return Array.from(tagsA);
-  });
-  return arrOfTagsA;
-};
-
-// console.log(filterTagsA('./Modelo/Modelo2'));
 
 // http request
 const httpRequest = (arrOfTagsA) => Promise.allSettled(arrOfTagsA.map((tag) => axios.get(tag.href)
@@ -99,23 +84,21 @@ const httpRequest = (arrOfTagsA) => Promise.allSettled(arrOfTagsA.map((tag) => a
     message: 'fail',
   }))));
 
-const httpRequestRes = (arrOfTagsA, route) => httpRequest(arrOfTagsA)
+const httpRequestRes = (arrOfTagsA, routeOfFile) => httpRequest(arrOfTagsA)
   .then((res) => res.map((promiseResult) => ({
     href: promiseResult.value.href,
     text: promiseResult.value.text,
-    file: route,
+    file: routeOfFile,
     status: promiseResult.value.status,
     ok: promiseResult.value.message,
   })));
 
-// get properties
 export const getProperties = (route) => {
-  const arrOfTagsA = filterTagsA(route);
-  if (arrOfTagsA.length === 1) {
-    return httpRequestRes(arrOfTagsA[0], route);
-  }
-  console.log(arrOfTagsA[2]);
-  console.log(joinPaths(route)[2]);
-  const newArrOfTagsA = arrOfTagsA.reduce((a, b) => a.concat(b));
-  return httpRequestRes(newArrOfTagsA, route);
+  const justObjWithTagsA = objArrWithRouteAndTagsA(route)
+    .filter((objArrOfOneFile) => objArrOfOneFile.content.length > 1);
+  return justObjWithTagsA.map((objArrOfOneFile) => {
+    const routeOfFile = objArrOfOneFile.route;
+    const arrOfTagsA = objArrOfOneFile.content;
+    return httpRequestRes(arrOfTagsA, routeOfFile);
+  });
 };

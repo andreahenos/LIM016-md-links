@@ -1,6 +1,9 @@
 {
   "name": "md-links-analyzer",
   "version": "0.1.0",
+  "bin": {
+    "md-links": "./src/cli.js"
+  },
   "description": "Tool that reads and analyzes files in Markdown format to verify the links they contain and report some statistics.",
   "devDependencies": {
     "@types/node-fetch": "^3.0.3",

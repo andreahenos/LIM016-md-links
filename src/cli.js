@@ -13,7 +13,7 @@ if (args.length === 2) {
 }
 
 if (args.length === 3) {
-  if (args[2] === '--help' || args[2] === '--h') {
+  if (args[2] === '-help' || args[2] === '-h') {
     mdLinks(args[2], { help: true })
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
@@ -30,7 +30,7 @@ if (args.length === 3) {
   }
 }
 
-if (args.length === 4 && (args[3] === '--validate' || args[3] === '--v')) {
+if (args.length === 4 && (args[3] === '-validate' || args[3] === '-v')) {
   mdLinks(args[2], { validate: true })
     .then((res) => {
       if (typeof res !== 'string') {
@@ -42,7 +42,7 @@ if (args.length === 4 && (args[3] === '--validate' || args[3] === '--v')) {
     .catch((err) => console.log(err));
 }
 
-if (args.length === 4 && (args[3] === '--stats' || args[3] === '--s')) {
+if (args.length === 4 && (args[3] === '-stats' || args[3] === '-s')) {
   mdLinks(args[2], { validate: true })
     .then((res) => {
       if (typeof res !== 'string') {
@@ -54,7 +54,7 @@ if (args.length === 4 && (args[3] === '--stats' || args[3] === '--s')) {
     .catch((err) => console.log(err));
 }
 
-if (args.length === 5 && ((args[3] === '--validate' && args[4] === '--stats') || (args[3] === '--v' && args[4] === '--s'))) {
+if (args.length === 5 && ((args[3] === '-validate' && args[4] === '-stats') || (args[3] === '-v' && args[4] === '-s'))) {
   mdLinks(args[2], { validate: true, stats: true })
     .then((res) => {
       if (typeof res !== 'string') {
