@@ -17,15 +17,28 @@ const helpOption = () => {
   mdLinks <path> [-validate] or [-v] -------------------- To see the URLs found, their texts in the file, the path they are found and their status.
   mdLinks <path> [-stats] or [-s] ----------------------- To see the total number of links and the number of unique links.
   mdLinks <path> [-validate] [-stats] or [-v] [-s] ------ To see the total number of links, the number of unique links and the number of broken links.
-  mdLinks [-help] or [-h] ------------------------------- To see the list of options.\n`);
+  mdLinks [-help] or [-h] ------------------------------- To see the list of commands.\n`);
   process.exit();
+};
+
+const verifyPath = (callback) => {
+  if (verifyPathExistence(args[2]) === false) {
+    process.stdout.write("\n>  PATH DOESN'T EXIST.\n");
+    process.exit();
+  } else {
+    callback(args[2]);
+  }
 };
 
 const defaultOption = (arg) => {
   mdLinks(arg, { validate: false })
     .then((res) => {
-      process.stdout.write(res.map((one) => `\nHref: ${one.href}\nText: ${one.text}\nFile: ${one.file}\n`).join(' '));
-      process.exit();
+      if (res.length < 1) {
+        process.stdout.write('\n>  NO LINKS TO ANALYZE.\n');
+      } else {
+        process.stdout.write(res.map((one) => `\nHref: ${one.href}\nText: ${one.text}\nFile: ${one.file}\n`).join(' '));
+        process.exit();
+      }
     })
     .catch((err) => {
       process.stderr.write(err);
@@ -33,20 +46,15 @@ const defaultOption = (arg) => {
     });
 };
 
-const verifyPathAndDefaultOption = () => {
-  if (verifyPathExistence(args[2]) === false) {
-    process.stdout.write("\n>  PATH DOESN'T EXIST.\n");
-    process.exit();
-  } else {
-    defaultOption(args[2]);
-  }
-};
-
 const validatetOption = (arg) => {
   mdLinks(arg, { validate: true })
     .then((res) => {
-      process.stdout.write(res.map((one) => `\nHref: ${one.href}\nText: ${one.text}\nFile: ${one.file}\nStatus: ${one.status}\nOk: ${one.ok}\n`).join(' '));
-      process.exit();
+      if (res.length < 1) {
+        process.stdout.write('\n>  NO LINKS TO ANALYZE.\n');
+      } else {
+        process.stdout.write(res.map((one) => `\nHref: ${one.href}\nText: ${one.text}\nFile: ${one.file}\nStatus: ${one.status}\nOk: ${one.ok}\n`).join(' '));
+        process.exit();
+      }
     })
     .catch((err) => {
       process.stderr.write(err);
@@ -57,8 +65,12 @@ const validatetOption = (arg) => {
 const statsOption = (arg) => {
   mdLinks(arg, { stats: true })
     .then((res) => {
-      process.stdout.write(`\nTotal: ${totalLinks(res)}\nUnique: ${uniqueLinks(res)}\n`);
-      process.exit();
+      if (res.length < 1) {
+        process.stdout.write('\n>  NO LINKS TO ANALYZE.\n');
+      } else {
+        process.stdout.write(`\nTotal: ${totalLinks(res)}\nUnique: ${uniqueLinks(res)}\n`);
+        process.exit();
+      }
     })
     .catch((err) => {
       process.stderr.write(err);
@@ -69,8 +81,12 @@ const statsOption = (arg) => {
 const validateAndStatsOption = (arg) => {
   mdLinks(arg, { stats: true })
     .then((res) => {
-      process.stdout.write(`\nTotal: ${totalLinks(res)}\nUnique: ${uniqueLinks(res)}\nBroken: ${brokenLinks(res)}\n`);
-      process.exit();
+      if (res.length < 1) {
+        process.stdout.write('\n>  NO LINKS TO ANALYZE.\n');
+      } else {
+        process.stdout.write(`\nTotal: ${totalLinks(res)}\nUnique: ${uniqueLinks(res)}\nBroken: ${brokenLinks(res)}\n`);
+        process.exit();
+      }
     })
     .catch((err) => {
       process.stderr.write(err);
@@ -82,28 +98,19 @@ const validateAndStatsOption = (arg) => {
 
 switch (args.length) {
   case 3:
-    if (args[2] === '-help' || args[2] === '-h') {
-      helpOption();
-    } else {
-      verifyPathAndDefaultOption();
-    }
-    process.stdout.write('\n> NEED HELP? USE: mdLinks [-help] or [-h] to see all options.\n');
+    if (args[2] === '-help' || args[2] === '-h') helpOption();
+    else verifyPath(defaultOption);
     break;
   case 4:
-    if (args[3] === '-validate' || args[3] === '-v') {
-      validatetOption(args[2]);
-    } else if (args[3] === '-stats' || args[3] === '-s') {
-      statsOption(args[2]);
-    }
-    process.stdout.write('\n> NEED HELP? USE: mdLinks [-help] or [-h] to see all options.\n');
+    if (args[3] === '-validate' || args[3] === '-v') verifyPath(validatetOption);
+    else if (args[3] === '-stats' || args[3] === '-s') verifyPath(statsOption);
+    else process.stdout.write('\n> NEED HELP? USE: mdLinks [-help] or [-h] to see all commands.\n');
     break;
   case 5:
-    if ((args[3] === '-validate' && args[4] === '-stats') || (args[3] === '-v' && args[4] === '-s')) {
-      validateAndStatsOption(args[2]);
-    }
-    process.stdout.write('\n> NEED HELP? USE: mdLinks [-help] or [-h] to see all options.\n');
+    if ((args[3] === '-validate' && args[4] === '-stats') || (args[3] === '-v' && args[4] === '-s')) verifyPath(validateAndStatsOption);
+    else process.stdout.write('\n> NEED HELP? USE: mdLinks [-help] or [-h] to see all commands.\n');
     break;
   default:
-    process.stdout.write('\n> NEED HELP? USE: mdLinks [-help] or [-h] to see all options.\n');
+    process.stdout.write('\n> NEED HELP? USE: mdLinks [-help] or [-h] to see all commands.\n');
     break;
 }

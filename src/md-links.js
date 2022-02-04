@@ -5,10 +5,12 @@ import {
 export function mdLinks(path, option) {
   const promise = new Promise((resolve, reject) => {
     try {
-      Promise.all(getProperties(path))
-        .then((res) => {
-          resolve(res.flat());
-        });
+      if (option) {
+        Promise.all(getProperties(path))
+          .then((res) => {
+            resolve(res.flat());
+          });
+      }
     } catch (err) {
       reject(`\n> AN ERROR HAS OCURRED:  ${err.message}\n`);
     }
