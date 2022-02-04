@@ -108,7 +108,7 @@ Reflexiona y luego marca los objetivos que has llegado a entender y aplicar en t
   * [Recursión o Recursividad - Laboratoria Developers en Medium](https://medium.com/laboratoria-developers/recursi%C3%B3n-o-recursividad-ec8f1a359727)
 </p></details>
 
-- [ ] **Módulos de CommonJS**
+- [x] **Módulos de CommonJS**
 
   <details><summary>Links</summary><p>
 
@@ -124,7 +124,7 @@ Reflexiona y luego marca los objetivos que has llegado a entender y aplicar en t
   * [Función Callback - MDN](https://developer.mozilla.org/es/docs/Glossary/Callback_function)
 </p></details>
 
-- [ ] **Promesas**
+- [x] **Promesas**
 
   <details><summary>Links</summary><p>
 
@@ -157,11 +157,11 @@ Reflexiona y luego marca los objetivos que has llegado a entender y aplicar en t
 
 - [ ] **Uso de linter (ESLINT)**
 
-- [ ] **Uso de identificadores descriptivos (Nomenclatura y Semántica)**
+- [x] **Uso de identificadores descriptivos (Nomenclatura y Semántica)**
 
 ### Node.js
 
-- [ ] **Instalar y usar módulos con npm**
+- [x] **Instalar y usar módulos con npm**
 
   <details><summary>Links</summary><p>
 
@@ -189,7 +189,7 @@ Reflexiona y luego marca los objetivos que has llegado a entender y aplicar en t
   * [Process - Documentación oficial (en inglés)](https://nodejs.org/api/process.html)
 </p></details>
 
-- [ ] **File system (fs, path)**
+- [x] **File system (fs, path)**
 
   <details><summary>Links</summary><p>
 
@@ -201,7 +201,7 @@ Reflexiona y luego marca los objetivos que has llegado a entender y aplicar en t
 
 - [x] **Git: Instalación y configuración**
 
-- [ ] **Git: Control de versiones con git (init, clone, add, commit, status, push, pull, remote)**
+- [x] **Git: Control de versiones con git (init, clone, add, commit, status, push, pull, remote)**
 
 - [ ] **Git: Integración de cambios entre ramas (branch, checkout, fetch, merge, reset, rebase, tag)**
 
@@ -215,12 +215,7 @@ Reflexiona y luego marca los objetivos que has llegado a entender y aplicar en t
 </p></details>
 
 - [ ] **GitHub: Colaboración en Github (branches | forks | pull requests | code review | tags)**
-
-<<<<<<< HEAD
-- [  ] **GitHub: Organización en Github (projects | issues | labels | milestones | releases)**
-=======
 - [x] **GitHub: Organización en Github (projects | issues | labels | milestones | releases)**
->>>>>>> cd467df195c156a32a641802337bc6c71c22e20f
 
 ### HTTP
 
