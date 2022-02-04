@@ -2,7 +2,7 @@
   "name": "md-links-analyzer",
   "version": "0.1.0",
   "bin": {
-    "md-links": "./src/cli.js"
+    "md-links": "src/cli.js"
   },
   "description": "Tool that reads and analyzes files in Markdown format to verify the links they contain and report some statistics.",
   "devDependencies": {
@@ -45,6 +45,7 @@
     "axios": "^0.25.0",
     "dompurify": "^2.3.4",
     "jsdom": "^19.0.0",
-    "marked": "^4.0.10"
+    "marked": "^4.0.10",
+    "readline": "^1.3.0"
   }
 }
