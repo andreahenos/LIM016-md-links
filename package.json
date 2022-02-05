@@ -1,5 +1,5 @@
 {
-  "name": "md-links-analyzer",
+  "name": "md-links-analizer",
   "version": "0.1.0",
   "bin": {
     "md-links": "src/cli.js"
@@ -9,20 +9,21 @@
     "@types/node-fetch": "^3.0.3",
     "eslint": "^8.7.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.25.4"
+    "eslint-plugin-import": "^2.25.4",
+    "jest": "^27.4.7"
   },
   "scripts": {
     "start": "node ./src/md-links.js",
-    "pretest": "npm run eslint",
-    "test": "jest --coverage",
-    "lint": "eslint"
+    "pretest": "eslint",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
   },
   "type": "module",
-  "main": "index.js",
+  "main": "md-links.js",
   "keywords": [
     "javascript",
     "markdown",
     "links",
+    "analyze",
     "md-links",
     "jest",
     "api"
@@ -45,7 +46,6 @@
     "axios": "^0.25.0",
     "dompurify": "^2.3.4",
     "jsdom": "^19.0.0",
-    "marked": "^4.0.10",
-    "readline": "^1.3.0"
+    "marked": "^4.0.10"
   }
 }

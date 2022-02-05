@@ -79,7 +79,7 @@ const statsOption = (arg) => {
 };
 
 const validateAndStatsOption = (arg) => {
-  mdLinks(arg, { stats: true })
+  mdLinks(arg, { validate_stats: true })
     .then((res) => {
       if (res.length < 1) {
         process.stdout.write('\n>  NO LINKS TO ANALYZE.\n');

@@ -9,15 +9,15 @@ import axios from 'axios';
 export const verifyPathExistence = (route) => fs.existsSync(route);
 
 // get absolute path
-const getAbsolutePath = (route) => (!path.isAbsolute(route)
+export const getAbsolutePath = (route) => (!path.isAbsolute(route)
   ? path.resolve(route)
   : route);
 
 // verify tipe of file
-const verifyFileType = (route) => fs.statSync(route).isFile();
+export const verifyFileType = (route) => fs.statSync(route).isFile();
 
 // get md files
-const arrWithMdFileRoutes = (route) => {
+export const arrWithMdFileRoutes = (route) => {
   if (verifyFileType(route)) {
     const absRoute = getAbsolutePath(route);
     if (path.extname(absRoute) === '.md') return absRoute.split(' ');
@@ -33,7 +33,7 @@ const arrWithMdFileRoutes = (route) => {
 };
 
 // get content of files
-const objsArrWithRouteAndContent = (arrOfFiles) => {
+export const objsArrWithRouteAndContent = (arrOfFiles) => {
   const obj = arrOfFiles.map((fileRoute) => ({
     route: fileRoute,
     content: fs.readFileSync(fileRoute, 'utf8'),
@@ -42,7 +42,7 @@ const objsArrWithRouteAndContent = (arrOfFiles) => {
 };
 
 // convert content to HTML
-const convertToHtml = (content) => {
+export const convertToHtml = (content) => {
   const fileInHTML = marked.parse(content);
   const dom = new JSDOM(fileInHTML);
   const DOMPurify = createDOMPurify(dom.window);
@@ -57,7 +57,7 @@ export const filterTagsA = (htmlContent) => {
 };
 
 // convert to html and filter anchor tags
-const objArrWithRouteAndTagsA = (route) => {
+export const objArrWithRouteAndTagsA = (route) => {
   const arrWithFiles = arrWithMdFileRoutes(route);
   const changeContentToTagsA = objsArrWithRouteAndContent(arrWithFiles).map((objOneFile) => {
     const objOfOneFile = objOneFile;
@@ -70,21 +70,23 @@ const objArrWithRouteAndTagsA = (route) => {
 };
 
 // http request
-const httpRequest = (arrOfTagsA) => Promise.allSettled(arrOfTagsA.map((tag) => axios.get(tag.href)
-  .then((res) => ({
-    href: tag.href,
-    text: tag.textContent.slice(0, 50),
-    status: res.status,
-    message: 'ok',
-  }))
-  .catch((res) => ({
-    href: tag.href,
-    text: tag.textContent.slice(0, 50),
-    status: res.response.status,
-    message: 'fail',
-  }))));
+export const httpRequest = (arrOfTagsA) => Promise.allSettled(
+  arrOfTagsA.map((tag) => axios.get(tag.href)
+    .then((res) => ({
+      href: tag.href,
+      text: tag.textContent.slice(0, 50),
+      status: res.status,
+      message: 'ok',
+    }))
+    .catch((res) => ({
+      href: tag.href,
+      text: tag.textContent.slice(0, 50),
+      status: res.response.status,
+      message: 'fail',
+    }))),
+);
 
-const httpRequestRes = (arrOfTagsA, routeOfFile) => httpRequest(arrOfTagsA)
+export const httpRequestRes = (arrOfTagsA, routeOfFile) => httpRequest(arrOfTagsA)
   .then((res) => res.map((promiseResult) => ({
     href: promiseResult.value.href,
     text: promiseResult.value.text,
