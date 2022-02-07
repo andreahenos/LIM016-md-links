@@ -131,31 +131,51 @@ describe('objArrWithRouteAndTagsA', () => {
 });
 
 describe('httpRequest', () => {
-  it('Retorna objs con propiedades de cada link', () => {
-    httpRequest(objArrWithRouteAndTagsA('./Carpeta')[1].content, 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md')
+  it('Retorna un array de objs con las propiedades de cada link', () => {
+    const ruta = 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md';
+    const arrOfLinks = objArrWithRouteAndTagsA('./Carpeta')[1].content;
+    httpRequest(arrOfLinks, ruta).then((res) => {
+      expect(res).toEqual(objsArrProperties);
+    });
+  });
+});
+
+describe('httpRequest', (done) => {
+  it('Retorna objs con propiedades de cada link y mensajes de status "ok"', () => {
+    const ruta = 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md';
+    const arrOfLinks = objArrWithRouteAndTagsA('./Carpeta')[1].content;
+    httpRequest(arrOfLinks, ruta)
       .then((res) => {
-        objArrWithRouteAndTagsA('./Carpeta')[1].content.map((one) => {
-          if (one === 'https://nodejs.org/api/path.html') {
-            expect(res).toEqual(uniqueProperties);
-          }
-          if (one === 'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e') {
-            expect(res).toEqual(repeatedProperties);
-          }
-        });
-      })
+        if (arrOfLinks[0] === 'https://nodejs.org/api/path.html') {
+          expect(res).toEqual(uniqueProperties);
+          done();
+        }
+        if (arrOfLinks[1] === 'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e') {
+          expect(res).toEqual(repeatedProperties);
+          done();
+        }
+      });
+  });
+});
+
+describe('httpRequest', (done) => {
+  it('Retorna objs con propiedades de cada link y mensajes de status "fail"', () => {
+    const ruta = 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md';
+    const arrOfLinks = objArrWithRouteAndTagsA('./Carpeta')[1].content;
+    httpRequest(arrOfLinks, ruta)
       .catch((res) => {
-        objArrWithRouteAndTagsA('./Carpeta')[1].content.map((one) => {
-          if (one === 'https://www.marvel.com/moves') {
-            expect(res).toEqual(brokenProperties);
-          }
-        });
+        if (arrOfLinks[2] === 'https://www.marvel.com/moves') {
+          expect(res).toEqual(brokenProperties);
+          done();
+        }
       });
   });
 });
 
 describe('getProperties', () => {
   it('Retorna una promesa con un array de objects como resultado', () => {
-    Promise.all(getProperties('C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md'))
+    const ruta = 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md';
+    Promise.all(getProperties(ruta))
       .then((res) => {
         expect(res.flat()).toEqual(objsArrProperties);
       });

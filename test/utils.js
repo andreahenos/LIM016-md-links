@@ -2,7 +2,8 @@ export const arrOfOneMdFile = ['C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-l
 
 export const arrOfAllMdFiles = [
   'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\Carpeta2\\md2.md',
-  'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md'];
+  'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md',
+];
 
 export const objsArr = [
   {
@@ -40,6 +41,30 @@ export const NewObjsArr = [{
 },
 ];
 
+export const uniqueProperties = {
+  file: 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md',
+  href: 'https://nodejs.org/api/path.html',
+  ok: 'ok',
+  status: 200,
+  text: 'Unique',
+};
+
+export const repeatedProperties = {
+  file: 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md',
+  href: 'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e',
+  ok: 'ok',
+  status: 200,
+  text: 'Repeated',
+};
+
+export const brokenProperties = {
+  file: 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md',
+  href: 'https://www.marvel.com/moves',
+  ok: 'fail',
+  status: 404,
+  text: 'Broken',
+};
+
 export const objsArrProperties = [
   {
     file: 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md',
@@ -70,27 +95,3 @@ export const objsArrProperties = [
     text: 'Broken',
   },
 ];
-
-export const uniqueProperties = {
-  file: 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md',
-  href: 'https://nodejs.org/api/path.html',
-  ok: 'ok',
-  status: 200,
-  text: 'Unique',
-};
-
-export const repeatedProperties = {
-  file: 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md',
-  href: 'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e',
-  ok: 'ok',
-  status: 200,
-  text: 'Repeated',
-};
-
-export const brokenProperties = {
-  file: 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md',
-  href: 'https://www.marvel.com/moves',
-  ok: 'fail',
-  status: 404,
-  text: 'Broken',
-};
