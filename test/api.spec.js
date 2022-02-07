@@ -19,9 +19,6 @@ import {
   htmlContent,
   arrOfAllLinks,
   NewObjsArr,
-  uniqueProperties,
-  repeatedProperties,
-  brokenProperties,
   objsArrProperties,
 } from './utils.js';
 
@@ -100,13 +97,13 @@ describe('convertToHtml', () => {
 
 describe('filterTagsA', () => {
   it('Retorna un array con los tags anchor del contenido ingresado', () => {
-    const arrOfTagsAContent = filterTagsA(htmlContent).map((one) => one.toString());
-    expect(arrOfTagsAContent).toEqual(arrOfAllLinks);
+    const arrOfTagsA = filterTagsA(htmlContent).map((one) => one.toString());
+    expect(arrOfTagsA).toEqual(arrOfAllLinks);
   });
 
   it('Retorna un array vacío si el contenido ingresado no tiene tags anchor', () => {
-    const arrOfTagsAContent = filterTagsA(convertToHtml(objsArr[0].content));
-    expect(arrOfTagsAContent).toEqual([]);
+    const arrOfTagsA = filterTagsA(convertToHtml(objsArr[0].content));
+    expect(arrOfTagsA).toEqual([]);
   });
 });
 
@@ -131,10 +128,10 @@ describe('objArrWithRouteAndTagsA', () => {
 });
 
 describe('httpRequest', () => {
-  const ruta = 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md';
   const arrOfLinks = objArrWithRouteAndTagsA('./Carpeta')[1].content;
+  const ruta = 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md';
 
-  it('La función httpRequest', (done) => {
+  it('Retorna un array de objects con las propiedades de los links como resultado', (done) => {
     httpRequest(arrOfLinks, ruta)
       .then((result) => {
         expect(result).toEqual(objsArrProperties);
