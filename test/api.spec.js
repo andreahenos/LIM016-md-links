@@ -9,7 +9,7 @@ import {
   filterTagsA,
   objArrWithRouteAndTagsA,
   httpRequest,
-  // getProperties,
+  getProperties,
 } from '../src/api.js';
 
 import {
@@ -19,7 +19,10 @@ import {
   htmlContent,
   arrOfAllLinks,
   NewObjsArr,
-  objWithProperties,
+  uniqueProperties,
+  repeatedProperties,
+  brokenProperties,
+  objsArrProperties,
 } from './utils.js';
 
 // jest.mock('axios');
@@ -128,12 +131,33 @@ describe('objArrWithRouteAndTagsA', () => {
 });
 
 describe('httpRequest', () => {
-  it('Retorna una promesa con un array de object como resultado', () => {
-    const httpReqst = httpRequest(objArrWithRouteAndTagsA('./Carpeta')[1].content, 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md');
-    expect(httpReqst).toBeInstanceOf(Promise);
+  it('Retorna objs con propiedades de cada link', () => {
+    httpRequest(objArrWithRouteAndTagsA('./Carpeta')[1].content, 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md')
+      .then((res) => {
+        objArrWithRouteAndTagsA('./Carpeta')[1].content.map((one) => {
+          if (one === 'https://nodejs.org/api/path.html') {
+            expect(res).toEqual(uniqueProperties);
+          }
+          if (one === 'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e') {
+            expect(res).toEqual(repeatedProperties);
+          }
+        });
+      })
+      .catch((res) => {
+        objArrWithRouteAndTagsA('./Carpeta')[1].content.map((one) => {
+          if (one === 'https://www.marvel.com/moves') {
+            expect(res).toEqual(brokenProperties);
+          }
+        });
+      });
+  });
+});
 
-    httpRequest(objArrWithRouteAndTagsA('./Carpeta')[1].content, 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md').then((res) => {
-      expect(res).toEqual(objWithProperties);
-    });
+describe('getProperties', () => {
+  it('Retorna una promesa con un array de objects como resultado', () => {
+    Promise.all(getProperties('C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md'))
+      .then((res) => {
+        expect(res.flat()).toEqual(objsArrProperties);
+      });
   });
 });
