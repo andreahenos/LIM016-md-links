@@ -128,8 +128,8 @@ describe('objArrWithRouteAndTagsA', () => {
 });
 
 describe('httpRequest', () => {
-  const arrOfLinks = objArrWithRouteAndTagsA('./Carpeta')[1].content;
   const ruta = 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md';
+  const arrOfLinks = objArrWithRouteAndTagsA('./Carpeta')[1].content;
 
   it('Retorna un array de objects con las propiedades de los links como resultado', (done) => {
     httpRequest(arrOfLinks, ruta)
