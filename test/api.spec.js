@@ -131,43 +131,18 @@ describe('objArrWithRouteAndTagsA', () => {
 });
 
 describe('httpRequest', () => {
-  it('Retorna un array de objs con las propiedades de cada link', () => {
-    const ruta = 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md';
-    const arrOfLinks = objArrWithRouteAndTagsA('./Carpeta')[1].content;
-    httpRequest(arrOfLinks, ruta).then((res) => {
-      expect(res).toEqual(objsArrProperties);
-    });
-  });
-});
+  const ruta = 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md';
+  const arrOfLinks = objArrWithRouteAndTagsA('./Carpeta')[1].content;
 
-describe('httpRequest', (done) => {
-  it('Retorna objs con propiedades de cada link y mensajes de status "ok"', () => {
-    const ruta = 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md';
-    const arrOfLinks = objArrWithRouteAndTagsA('./Carpeta')[1].content;
+  it('La función httpRequest', (done) => {
     httpRequest(arrOfLinks, ruta)
-      .then((res) => {
-        if (arrOfLinks[0] === 'https://nodejs.org/api/path.html') {
-          expect(res).toEqual(uniqueProperties);
-          done();
-        }
-        if (arrOfLinks[1] === 'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e') {
-          expect(res).toEqual(repeatedProperties);
-          done();
-        }
-      });
-  });
-});
-
-describe('httpRequest', (done) => {
-  it('Retorna objs con propiedades de cada link y mensajes de status "fail"', () => {
-    const ruta = 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md';
-    const arrOfLinks = objArrWithRouteAndTagsA('./Carpeta')[1].content;
-    httpRequest(arrOfLinks, ruta)
-      .catch((res) => {
-        if (arrOfLinks[2] === 'https://www.marvel.com/moves') {
-          expect(res).toEqual(brokenProperties);
-          done();
-        }
+      .then((result) => {
+        expect(result).toEqual(objsArrProperties);
+        done();
+      })
+      .catch((result) => {
+        expect(result).toEqual(objsArrProperties);
+        done();
       });
   });
 });
