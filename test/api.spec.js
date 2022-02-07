@@ -1,3 +1,4 @@
+// import axios from 'axios';
 import {
   verifyPathExistence,
   getAbsolutePath,
@@ -7,49 +8,21 @@ import {
   convertToHtml,
   filterTagsA,
   objArrWithRouteAndTagsA,
-/*  httpRequest,
+  httpRequest,
   httpRequestRes,
-  getProperties, */
+  // getProperties,
 } from '../src/api.js';
 
-const arrOfAllMdFiles = [
-  'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md',
-  'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\Other\\md2.md'];
+import {
+  arrOfOneMdFile,
+  arrOfAllMdFiles,
+  objsArr,
+  htmlContent,
+  arrOfAllLinks,
+  NewObjsArr,
+} from './utils.js';
 
-const arrOfAllMdFilesVacío = [];
-
-const objsArr = [{
-  route: 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md',
-  content: '### Prueba de documento con links\r\n'
-  + '* [Unique](https://nodejs.org/api/path.html)\r\n'
-  + '* [Repeated](https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e)\r\n'
-  + '* [Repeated](https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e)\r\n'
-  + '* [Broken](https://www.marvel.com/moves)',
-}, {
-  route: 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\Other\\md2.md',
-  content: '### Prueba de documento sin links',
-}];
-
-const htmlContent = `<h3 id="prueba-de-documento-con-links">Prueba de documento con links</h3>
-<ul>
-<li><a href="https://nodejs.org/api/path.html">Unique</a></li>
-<li><a href="https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e">Repeated</a></li>
-<li><a href="https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e">Repeated</a></li>
-<li><a href="https://www.marvel.com/moves">Broken</a></li>
-</ul>
-`;
-
-const htmlContentWithoutLinks = '<h3 id="prueba-de-documento-sin-links">Prueba de documento sin links</h3>';
-
-const arrOfAllLinks = ['https://nodejs.org/api/path.html', 'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e', 'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e', 'https://www.marvel.com/moves'];
-
-const NewObjsArr = [{
-  route: 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md',
-  content: arrOfAllLinks,
-}, {
-  route: 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\Other\\md2.md',
-  content: [],
-}];
+// jest.mock('axios');
 
 describe('verifyPathExistence', () => {
   it('Retorna TRUE si la ruta ingresada existe', () => {
@@ -92,8 +65,13 @@ describe('arrWithMdFileRoutes', () => {
     expect(arrOfFiles).toEqual(arrOfAllMdFiles);
   });
 
+  it('Retorna un array con la ruta absoluta del archivo .md ingresado', () => {
+    const arrOfFile = arrWithMdFileRoutes('./Carpeta/md.md');
+    expect(arrOfFile).toEqual(arrOfOneMdFile);
+  });
+
   it('Retorna un array vacío si la ruta ingresada no contiene archivos .md', () => {
-    const arrOfFiles = arrWithMdFileRoutes('./Carpeta/Other/js.js');
+    const arrOfFiles = arrWithMdFileRoutes('./Carpeta/Carpeta2/js.js');
     expect(arrOfFiles).toEqual([]);
   });
 });
@@ -105,14 +83,14 @@ describe('objsArrWithRouteAndContent', () => {
   });
 
   it('Retorna un array vacío si el array pasado como parametro es vacío', () => {
-    const objsArrResult = objsArrWithRouteAndContent(arrOfAllMdFilesVacío);
+    const objsArrResult = objsArrWithRouteAndContent(arrWithMdFileRoutes('./Carpeta/Carpeta3'));
     expect(objsArrResult).toEqual([]);
   });
 });
 
 describe('convertToHtml', () => {
   it('Retorna el contenido de un archivo .md en formato HTML', () => {
-    const mdContent = convertToHtml(objsArr[0].content);
+    const mdContent = convertToHtml(objsArr[1].content);
     expect(mdContent).toEqual(htmlContent);
   });
 });
@@ -124,7 +102,7 @@ describe('filterTagsA', () => {
   });
 
   it('Retorna un array vacío si el contenido ingresado no tiene tags anchor', () => {
-    const arrOfTagsAContent = filterTagsA(htmlContentWithoutLinks);
+    const arrOfTagsAContent = filterTagsA(convertToHtml(objsArr[0].content));
     expect(arrOfTagsAContent).toEqual([]);
   });
 });
@@ -136,15 +114,29 @@ describe('objArrWithRouteAndTagsA', () => {
       obj = [
         {
           route: obj[0].route,
-          content: obj[0].content.map((one) => one.toString()),
+          content: obj[0].content,
         },
         {
           route: obj[1].route,
-          content: obj[1].content,
+          content: obj[1].content.map((one) => one.toString()),
         },
       ];
       return obj;
     };
     expect(objsArrResult()).toEqual(NewObjsArr);
+  });
+});
+
+describe('httpRequest', () => {
+  it('Retorna una promesa', () => {
+    const httpReqst = httpRequest(objArrWithRouteAndTagsA('./Carpeta')[0].content);
+    expect(httpReqst).toBeInstanceOf(Promise);
+  });
+});
+
+describe('httpRequestRes', () => {
+  it('Retorna una promesa', () => {
+    const httpRes = httpRequestRes(objArrWithRouteAndTagsA('./Carpeta')[0].content, 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md');
+    expect(httpRes).toBeInstanceOf(Promise);
   });
 });

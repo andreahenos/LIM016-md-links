@@ -36,7 +36,7 @@ const defaultOption = (arg) => {
       if (res.length < 1) {
         process.stdout.write('\n>  NO LINKS TO ANALYZE.\n');
       } else {
-        process.stdout.write(res.map((one) => `\nHref: ${one.href}\nText: ${one.text}\nFile: ${one.file}\n`).join(' '));
+        process.stdout.write(res.map((one) => `\n  * Href: ${one.href}\n  * Text: ${one.text}\n  * File: ${one.file}\n________________________________________________________________________\n`).join(' '));
         process.exit();
       }
     })
@@ -52,7 +52,7 @@ const validatetOption = (arg) => {
       if (res.length < 1) {
         process.stdout.write('\n>  NO LINKS TO ANALYZE.\n');
       } else {
-        process.stdout.write(res.map((one) => `\nHref: ${one.href}\nText: ${one.text}\nFile: ${one.file}\nStatus: ${one.status}\nOk: ${one.ok}\n`).join(' '));
+        process.stdout.write(res.map((one) => `\n  * Href: ${one.href}\n  * Text: ${one.text}\n  * File: ${one.file}\n  * Status: ${one.status}\n  * Ok: ${one.ok}\n________________________________________________________________________\n`).join(' '));
         process.exit();
       }
     })
@@ -68,7 +68,7 @@ const statsOption = (arg) => {
       if (res.length < 1) {
         process.stdout.write('\n>  NO LINKS TO ANALYZE.\n');
       } else {
-        process.stdout.write(`\nTotal: ${totalLinks(res)}\nUnique: ${uniqueLinks(res)}\n`);
+        process.stdout.write(`\n* TOTAL   --->  ${totalLinks(res)}\n* UNIQUE  --->  ${uniqueLinks(res)}\n`);
         process.exit();
       }
     })
@@ -84,7 +84,7 @@ const validateAndStatsOption = (arg) => {
       if (res.length < 1) {
         process.stdout.write('\n>  NO LINKS TO ANALYZE.\n');
       } else {
-        process.stdout.write(`\nTotal: ${totalLinks(res)}\nUnique: ${uniqueLinks(res)}\nBroken: ${brokenLinks(res)}\n`);
+        process.stdout.write(`\n* TOTAL   --->  ${totalLinks(res)}\n* UNIQUE  --->  ${uniqueLinks(res)}\n* BROKEN  --->  ${brokenLinks(res)}\n`);
         process.exit();
       }
     })

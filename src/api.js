@@ -53,6 +53,7 @@ export const convertToHtml = (content) => {
 export const filterTagsA = (htmlContent) => {
   const dom = new JSDOM(htmlContent);
   const tagsA = dom.window.document.querySelectorAll('a');
+
   return Array.from(tagsA);
 };
 
@@ -97,7 +98,7 @@ export const httpRequestRes = (arrOfTagsA, routeOfFile) => httpRequest(arrOfTags
 
 export const getProperties = (route) => {
   const justObjWithTagsA = objArrWithRouteAndTagsA(route)
-    .filter((objArrOfOneFile) => objArrOfOneFile.content.length > 1);
+    .filter((objArrOfOneFile) => objArrOfOneFile.content.length > 0);
   return justObjWithTagsA.map((objArrOfOneFile) => {
     const routeOfFile = objArrOfOneFile.route;
     const arrOfTagsA = objArrOfOneFile.content;
