@@ -39,3 +39,34 @@ export const NewObjsArr = [{
   content: arrOfAllLinks,
 },
 ];
+
+export const objWithProperties = [
+  {
+    file: 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md',
+    href: 'https://nodejs.org/api/path.html',
+    ok: 'ok',
+    status: 200,
+    text: 'Unique',
+  },
+  {
+    file: 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md',
+    href: 'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e',
+    ok: 'ok',
+    status: 200,
+    text: 'Repeated',
+  },
+  {
+    file: 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md',
+    href: 'https://medium.com/netscape/a-guide-to-create-a-nodejs-command-line-package-c2166ad0452e',
+    ok: 'ok',
+    status: 200,
+    text: 'Repeated',
+  },
+  {
+    file: 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md',
+    href: 'https://www.marvel.com/moves',
+    ok: 'fail',
+    status: 404,
+    text: 'Broken',
+  },
+];

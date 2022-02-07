@@ -9,7 +9,6 @@ import {
   filterTagsA,
   objArrWithRouteAndTagsA,
   httpRequest,
-  httpRequestRes,
   // getProperties,
 } from '../src/api.js';
 
@@ -20,6 +19,7 @@ import {
   htmlContent,
   arrOfAllLinks,
   NewObjsArr,
+  objWithProperties,
 } from './utils.js';
 
 // jest.mock('axios');
@@ -128,15 +128,12 @@ describe('objArrWithRouteAndTagsA', () => {
 });
 
 describe('httpRequest', () => {
-  it('Retorna una promesa', () => {
-    const httpReqst = httpRequest(objArrWithRouteAndTagsA('./Carpeta')[0].content);
+  it('Retorna una promesa con un array de object como resultado', () => {
+    const httpReqst = httpRequest(objArrWithRouteAndTagsA('./Carpeta')[1].content, 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md');
     expect(httpReqst).toBeInstanceOf(Promise);
-  });
-});
 
-describe('httpRequestRes', () => {
-  it('Retorna una promesa', () => {
-    const httpRes = httpRequestRes(objArrWithRouteAndTagsA('./Carpeta')[0].content, 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md');
-    expect(httpRes).toBeInstanceOf(Promise);
+    httpRequest(objArrWithRouteAndTagsA('./Carpeta')[1].content, 'C:\\Users\\51960\\Desktop\\Md-Links\\LIM016-md-links\\Carpeta\\md.md').then((res) => {
+      expect(res).toEqual(objWithProperties);
+    });
   });
 });

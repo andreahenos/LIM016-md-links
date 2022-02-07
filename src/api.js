@@ -70,31 +70,23 @@ export const objArrWithRouteAndTagsA = (route) => {
   return changeContentToTagsA;
 };
 
-// http request
-export const httpRequest = (arrOfTagsA) => Promise.allSettled(
+export const httpRequest = (arrOfTagsA, route) => Promise.all(
   arrOfTagsA.map((tag) => axios.get(tag.href)
     .then((res) => ({
       href: tag.href,
       text: tag.textContent.slice(0, 50),
+      file: route,
       status: res.status,
-      message: 'ok',
+      ok: 'ok',
     }))
     .catch((res) => ({
       href: tag.href,
       text: tag.textContent.slice(0, 50),
+      file: route,
       status: res.response.status,
-      message: 'fail',
+      ok: 'fail',
     }))),
 );
-
-export const httpRequestRes = (arrOfTagsA, routeOfFile) => httpRequest(arrOfTagsA)
-  .then((res) => res.map((promiseResult) => ({
-    href: promiseResult.value.href,
-    text: promiseResult.value.text,
-    file: routeOfFile,
-    status: promiseResult.value.status,
-    ok: promiseResult.value.message,
-  })));
 
 export const getProperties = (route) => {
   const justObjWithTagsA = objArrWithRouteAndTagsA(route)
@@ -102,6 +94,6 @@ export const getProperties = (route) => {
   return justObjWithTagsA.map((objArrOfOneFile) => {
     const routeOfFile = objArrOfOneFile.route;
     const arrOfTagsA = objArrOfOneFile.content;
-    return httpRequestRes(arrOfTagsA, routeOfFile);
+    return httpRequest(arrOfTagsA, routeOfFile);
   });
 };
