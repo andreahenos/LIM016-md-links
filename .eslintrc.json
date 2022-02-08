@@ -2,7 +2,9 @@
     "env": {
         "node": true,
         "commonjs": true,
-        "es2021": true
+        "es2021": true,
+        "jest": true,
+        "browser": true
     },
     "parserOptions": {
         "ecmaVersion": 8
@@ -14,6 +16,7 @@
         "linebreak-style": 0,
         "import/extensions": 0,
         "import/prefer-default-export": 0,
+        "prefer-promise-reject-errors": "off",
         "prefer-destructuring": 0
         /* "jest/no-identical-title": "error",
         "jest/prefer-to-have-length": "warn",
