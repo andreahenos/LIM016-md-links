@@ -17,7 +17,7 @@ const helpOption = () => {
   mdLinks <path> [-validate] or [-v] -------------------- To see the URLs found, their texts in the file, the path they are found and their status.
   mdLinks <path> [-stats] or [-s] ----------------------- To see the total number of links and the number of unique links.
   mdLinks <path> [-validate] [-stats] or [-v] [-s] ------ To see the total number of links, the number of unique links and the number of broken links.
-  mdLinks [-help] or [-h] ------------------------------- To see the list of commands.\n`);
+  mdLinks [-help] or [-h] ------------------------------- To see a list of supported md-links commands.\n`);
   process.exit();
 };
 
@@ -68,7 +68,7 @@ const statsOption = (arg) => {
       if (res.length < 1) {
         process.stdout.write('\n>  NO LINKS TO ANALYZE.\n');
       } else {
-        process.stdout.write(`\n* TOTAL   --->  ${totalLinks(res)}\n* UNIQUE  --->  ${uniqueLinks(res)}\n`);
+        process.stdout.write(`\n* TOTAL   --->  ${totalLinks(res)}\n* UNIQUE  --->  ${uniqueLinks(res)}\n\n`);
         process.exit();
       }
     })
@@ -84,7 +84,7 @@ const validateAndStatsOption = (arg) => {
       if (res.length < 1) {
         process.stdout.write('\n>  NO LINKS TO ANALYZE.\n');
       } else {
-        process.stdout.write(`\n* TOTAL   --->  ${totalLinks(res)}\n* UNIQUE  --->  ${uniqueLinks(res)}\n* BROKEN  --->  ${brokenLinks(res)}\n`);
+        process.stdout.write(`\n* TOTAL   --->  ${totalLinks(res)}\n* UNIQUE  --->  ${uniqueLinks(res)}\n* BROKEN  --->  ${brokenLinks(res)}\n\n`);
         process.exit();
       }
     })
@@ -104,13 +104,13 @@ switch (args.length) {
   case 4:
     if (args[3] === '-validate' || args[3] === '-v') verifyPath(validatetOption);
     else if (args[3] === '-stats' || args[3] === '-s') verifyPath(statsOption);
-    else process.stdout.write('\n> NEED HELP? USE: mdLinks [-help] or [-h] to see all commands.\n');
+    else process.stdout.write('\n> NEED HELP? USE: mdLinks [-help] or [-h] to see all supported md-links commands.\n');
     break;
   case 5:
     if ((args[3] === '-validate' && args[4] === '-stats') || (args[3] === '-v' && args[4] === '-s')) verifyPath(validateAndStatsOption);
-    else process.stdout.write('\n> NEED HELP? USE: mdLinks [-help] or [-h] to see all commands.\n');
+    else process.stdout.write('\n> NEED HELP? USE: mdLinks [-help] or [-h] to see all supported md-links commands.\n');
     break;
   default:
-    process.stdout.write('\n> NEED HELP? USE: mdLinks [-help] or [-h] to see all commands.\n');
+    process.stdout.write('\n> NEED HELP? USE: mdLinks [-help] or [-h] to see all supported md-links commands.\n');
     break;
 }
