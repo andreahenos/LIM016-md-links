@@ -2,7 +2,7 @@
   "name": "@andreahenos/md-links",
   "version": "0.1.0",
   "bin": {
-    "md-links": "src/cli.js"
+    "md-links": "./src/cli.js"
   },
   "publishConfig": {
     "access": "public"

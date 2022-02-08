@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import process from 'process';
 import { verifyPathExistence } from './api.js';
 import { mdLinks } from './md-links.js';
