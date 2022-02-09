@@ -1,11 +1,13 @@
 <div align=center><h1>◎•◎•◎•◎  MD-LINKS  ◎•◎•◎•◎</h1></div>
 
 ## Index
-* [About](#about)
-* [Installation](#installation)
-* [Guide to use](#guide-to-use)
-* [Development](#development)
-* [Author](#author)
+* [About](#1-about-)
+* [Installation](#2-installation-)
+* [Guide to use](#3-guide-to-use-)
+* [Development](#4-development-)
+  * [JavaScript API](#javascript-api)
+  * [CLI](#cli)
+* [Author](#5-author-)
 
 ## 1. About 📋
 
