@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import fs from 'fs';
 import path from 'path';
 import { marked } from 'marked';
@@ -99,4 +97,3 @@ export const getProperties = (route) => {
     return httpRequest(arrOfTagsA, routeOfFile);
   });
 };
->>>>>>> feature
