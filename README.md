@@ -40,12 +40,15 @@ Absolute or relative path to a file or directory.
 ** *Options* **:
 - If you don't add an option, the `default response` is the URL, the attached text within the file, and the file path where the link was found.
 
+<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/default.png" width=50% ></div>
+
 -  **-validate**: 
 
 The -validate option returns the URL, the attached text within the file and the path of the file where the link was found, its status and a message. The message will be 'ok' if the link works, otherwise it will be 'fail'.
 
  > You can access this option with `md-links <path> -validate ` or `md-links <path> -v `
 
+<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/validate.png" width=50% ></div>
 
 - **-stats**:
 
@@ -53,14 +56,19 @@ The result will be basic statistics about the links found. You will be able to s
 
 > You can access this option with `md-links <path> -stats` or `md-links <path> -s`
 
+<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/stats.png" width=50% ></div>
+
 - **-validate -stats**:
 
 It will show basic statistics and the results of link validation.
 
 > You can access this option with `md-links <path> -validate -stats` or `md-links <path> -v -s`
 
+<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/validateAndStats.png" width=50% ></div>
 
 - Use  `md-links -help`  or `md-links -h` to see all supported commands
+
+<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/help.png" width=70% ></div>
 
 ### Other responses:
 
@@ -81,7 +89,11 @@ This project was developed in two parts:
 
 ### JavaScript API
 
+<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/API.jpeg" width=40% ></div>
+
 ### CLI
+
+<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/CLI.jpeg" width=40% ></div>
 
 ## 5. Author 👩💻
 Andrea Henostroza Sánchez [( andreahenos )](https://github.com/andreahenos)
