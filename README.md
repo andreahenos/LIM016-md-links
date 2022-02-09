@@ -1,4 +1,4 @@
-<div align=center><h1>◎•◎•◎•◎   MD-LINKS   ◎•◎•◎•◎</h1></div>
+<div align=center><h1>◎•◎•◎•◎  MD-LINKS  ◎•◎•◎•◎</h1></div>
 
 ## Index
 * [About](#about)
@@ -16,7 +16,7 @@ Tool that reads and analyzes files in Markdown format to verify the links they c
  **Version** | 1.0 |
 **Dependencies** |  Marked, JSDom, DOMPurify, Axios
 
----
+
 
 ## 2. Installation 🔧
 
@@ -25,7 +25,7 @@ Type the following command in the terminal:
 ``` js
 npm install @andreahenos/md-links
 ```
----
+
 
 ## 3. Guide to use 📘
 
@@ -74,7 +74,7 @@ It will show basic statistics and the results of link validation.
       -When the folder contains no Markdown files.
 
       -When the file does not contain links.
----
+
 
 ## 4. Development 🔨
 This project was developed in two parts:
