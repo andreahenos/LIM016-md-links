@@ -70,7 +70,7 @@ It will show basic statistics and the results of link validation.
 
 - Use  `md-links -help`  or `md-links -h` to see all supported commands
 
-<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/help.png" width=80% ></div>
+<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/help.png" width=95% ></div>
 
 ### Other responses:
 
