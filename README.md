@@ -76,10 +76,10 @@ It will show basic statistics and the results of link validation.
 
   - **"Path doesn't exists"** : When the entered path is incorrect or doesn't exist.
   - **"No links to analyze"** :
-      -When the path is to an empty file or folder.
-      -When the file is not Markdown.
-      -When the folder contains no Markdown files.
-      -When the file does not contain links.
+      - When the path is to an empty file or folder.
+      - When the file is not Markdown.
+      - When the folder contains no Markdown files.
+      - When the file does not contain links.
 
 
 ## 4. Development 🔨
