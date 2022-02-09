@@ -40,7 +40,7 @@ Absolute or relative path to a file or directory.
 ** *Options* **:
 - If you don't add an option, the `default response` is the URL, the attached text within the file, and the file path where the link was found.
 
-<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/default.png" width=50% ></div>
+<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/default.png" width=70% ></div>
 
 -  **-validate**: 
 
@@ -48,7 +48,7 @@ The -validate option returns the URL, the attached text within the file and the 
 
  > You can access this option with `md-links <path> -validate ` or `md-links <path> -v `
 
-<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/validate.png" width=50% ></div>
+<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/validate.png" width=70% ></div>
 
 - **-stats**:
 
@@ -68,7 +68,7 @@ It will show basic statistics and the results of link validation.
 
 - Use  `md-links -help`  or `md-links -h` to see all supported commands
 
-<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/help.png" width=70% ></div>
+<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/help.png" width=80% ></div>
 
 ### Other responses:
 
@@ -89,11 +89,11 @@ This project was developed in two parts:
 
 ### JavaScript API
 
-<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/API.jpeg" width=40% ></div>
+<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/API.jpeg" width=80% ></div>
 
 ### CLI
 
-<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/CLI.jpeg" width=40% ></div>
+<div align=center><img src="https://github.com/andreahenos/LIM016-md-links/blob/main/img/CLI.jpeg" width=80% ></div>
 
 ## 5. Author 👩💻
 Andrea Henostroza Sánchez [( andreahenos )](https://github.com/andreahenos)
